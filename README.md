@@ -1,4 +1,4 @@
-# hello-world
+# wolf-table
 
 ## Project setup
 ```

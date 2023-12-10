@@ -3,6 +3,7 @@ import selector from './index.selector';
 import editor from './index.editor';
 import scrollbar from './index.scrollbar';
 export function initEvents(t) {
+    //这里是注入点击事件的地方，t这个变量指的是Table这个类的实例，也就是/table/index.js里面的内容
     const { _canvas } = t;
     _canvas
         .on('mousedown', (evt) => mousedownHandler(t, evt))
@@ -23,6 +24,7 @@ function mousedownHandler(t, evt) {
     }
     // let cache = { row: 0, col: 0 };
     if (_selector && viewport) {
+        // 获取
         const { offsetX, offsetY, ctrlKey, metaKey, shiftKey } = evt;
         const vcell = viewport.cellAt(offsetX, offsetY);
         if (vcell) {

@@ -65,9 +65,10 @@ export default class Viewport {
         return false;
     }
     cellAt(x, y) {
+        // console.log(this.areas)
         const a2 = this.areas[1];
         const [ha1, ha21, ha23, ha3] = this.headerAreas;
-        if (x < a2.x && y < a2.y)
+        if (x < a2.x && y < a2.y){
             return {
                 placement: 'all',
                 row: 0,
@@ -77,6 +78,7 @@ export default class Viewport {
                 width: a2.x,
                 height: a2.y,
             };
+        }
         if (x < a2.x) {
             return Object.assign({ placement: 'row-header' }, (ha23.containsy(y) ? ha23 : ha3).cellAt(x, y));
         }

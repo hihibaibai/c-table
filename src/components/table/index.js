@@ -44,6 +44,7 @@ export default class Table {
             height: height(),
             width: width(),
         });
+        console.log("this._container",this._container)
         this._data = defaultData();
         // update default data
         if (options) {
@@ -55,6 +56,7 @@ export default class Table {
             if (renderer) {
                 this._rendererOptions = renderer;
             }
+            // 这一部分的data应该还是之前版本的, 因为现在的data格式改变了,所以可能不能用了.
             if (data) {
                 const { cols, rows, rowHeight, colWidth } = data;
                 const { _data } = this;
@@ -71,9 +73,11 @@ export default class Table {
         const canvasElement = document.createElement('canvas');
         // tabIndex for trigger keydown event
         this._canvas = h(canvasElement).attr('tabIndex', '1');
+        console.log("this._canvas",this._canvas)
         this._container.append(canvasElement);
         this._renderer = new TableRenderer(canvasElement, width(), height());
         this._overlayer = new Overlayer(this._container);
+        console.log("this._overlayer",this._overlayer)
         // resize rect of content
         resizeContentRect(this);
         if (options === null || options === void 0 ? void 0 : options.selectable) {

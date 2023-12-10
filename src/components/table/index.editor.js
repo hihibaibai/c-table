@@ -47,7 +47,7 @@ function reset(t) {
             const editor = get(t, cell);
             t._editor = editor;
             if (editor && _rect && _target) {
-                // console.log('row:', startRow, ', col:', startCol, ', rect:', _rect);
+                console.log('row:', startRow, ', col:', startCol, ', rect:', _rect);
                 if (cell) {
                     editor.value(cell);
                 }

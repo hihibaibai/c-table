@@ -1,5 +1,5 @@
-import {h} from "@views/report/tableComponent/table/element";
-import {stylePrefix} from "@views/report/tableComponent/table/config";
+import {h} from "../../table/element";
+import {stylePrefix} from "../../table/config";
 
 const colorGrid = [
   ['#ffffff', '#000100', '#e7e5e6', '#445569', '#5b9cd6', '#ed7d31', '#a5a5a5', '#ffc001', '#4371c6', '#71ae47'],

@@ -1,11 +1,11 @@
 import {h} from '../table/element';
 import {stylePrefix} from "../table/config";
 import Bold from "../table-toolbar/button/bold";
-import Italic from "@views/report/tableComponent/table-toolbar/button/italic";
-import StrikeThrough from "@views/report/tableComponent/table-toolbar/button/strikeThrough";
-import Underline from "@views/report/tableComponent/table-toolbar/button/underline";
-import TextColor from "@views/report/tableComponent/table-toolbar/button/textColor";
-import Bgcolor from "@views/report/tableComponent/table-toolbar/button/bgcolor";
+import Italic from "../table-toolbar/button/italic";
+import StrikeThrough from "../table-toolbar/button/strikeThrough";
+import Underline from "../table-toolbar/button/underline";
+import TextColor from "../table-toolbar/button/textColor";
+import Bgcolor from "../table-toolbar/button/bgcolor";
 export default class toolbar{
 	constructor(elementString,table) {
 		// 初始化格式
@@ -50,9 +50,9 @@ export default class toolbar{
 		this.buttons =[];
 
     // 粗体
-		let bold = new Bold(this.style.bold);
-		this.container.append(bold.el);
-		this.buttons.push(bold);
+	let bold = new Bold(this.style.bold);
+	this.container.append(bold.el);
+	this.buttons.push(bold);
 
     // 斜体
     let italic = new Italic(this.style.italic);

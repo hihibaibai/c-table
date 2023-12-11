@@ -2,13 +2,13 @@ import {stylePrefix} from "../../table/config";
 import {h} from "../../table/element";
 
 const icon =
-		'<svg width="18" height="18" style="display: block;margin: auto">' +
-		'  <path fill="#000000" fill-rule="evenodd" d="M9,3.5 C9,1.57 7.43,0 5.5,0 L1.77635684e-15,0 L1.77635684e-15,12 L6.25,12 C8.04,12 9.5,10.54 9.5,8.75 C9.5,7.45 8.73,6.34 7.63,5.82 C8.46,5.24 9,4.38 9,3.5 Z M5,2 C5.82999992,2 6.5,2.67 6.5,3.5 C6.5,4.33 5.82999992,5 5,5 L3,5 L3,2 L5,2 Z M3,10 L3,7 L5.5,7 C6.32999992,7 7,7.67 7,8.5 C7,9.33 6.32999992,10 5.5,10 L3,10 Z" transform="translate(4 3)"/>\n' +
-		'</svg>';
+		'    <svg width="18" height="18" style="display: block;margin: auto">\n' +
+  '      <path fill="#000000" d="M6,12 C8.76,12 11,9.76 11,7 L11,0 L9,0 L9,7 C9,8.75029916 7.49912807,10 6,10 C4.50087193,10 3,8.75837486 3,7 L3,0 L1,0 L1,7 C1,9.76 3.24,12 6,12 Z M0,13 L0,15 L12,15 L12,13 L0,13 Z" transform="translate(3 3)"/>\n' +
+  '    </svg>';
 
-export default class Bold{
+export default class Underline{
 	constructor(value) {
-		this.tag = 'bold';
+		this.tag = 'underline';
 		this.value = value;
 		this.el = this.element();
 		this.change = () => {};

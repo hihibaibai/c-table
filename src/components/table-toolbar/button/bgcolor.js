@@ -2,13 +2,13 @@ import {stylePrefix} from "../../table/config";
 import {h} from "../../table/element";
 
 const icon =
-		'<svg width="18" height="18" style="display: block;margin: auto">' +
-		'  <path fill="#000000" fill-rule="evenodd" d="M9,3.5 C9,1.57 7.43,0 5.5,0 L1.77635684e-15,0 L1.77635684e-15,12 L6.25,12 C8.04,12 9.5,10.54 9.5,8.75 C9.5,7.45 8.73,6.34 7.63,5.82 C8.46,5.24 9,4.38 9,3.5 Z M5,2 C5.82999992,2 6.5,2.67 6.5,3.5 C6.5,4.33 5.82999992,5 5,5 L3,5 L3,2 L5,2 Z M3,10 L3,7 L5.5,7 C6.32999992,7 7,7.67 7,8.5 C7,9.33 6.32999992,10 5.5,10 L3,10 Z" transform="translate(4 3)"/>\n' +
-		'</svg>';
+		'      <svg width="18" height="18" style="display: block;margin: auto">\n' +
+  '        <rect fill="#000000" stroke="black" stroke-width="1" width="16" height="16"></rect>\n' +
+  '      </svg>';
 
-export default class Bold{
+export default class Bgcolor{
 	constructor(value) {
-		this.tag = 'bold';
+		this.tag = 'bgcolor';
 		this.value = value;
 		this.el = this.element();
 		this.change = () => {};
@@ -21,6 +21,7 @@ export default class Bold{
     const node = placeholder.firstElementChild;
 		return h('div', `${stylePrefix}-toolbar-btn`)
 				.on('click',(event) =>{
+					this.value = !this.value;
 					if (this.value){
 						this.activeElementCss();
 					}
@@ -41,14 +42,12 @@ export default class Bold{
 				// .attr('data-tooltip', tip);
 	}
 
-  activeElementCss(){
-    this.value = !this.value;
-    this.el.css('background-color','rgba(0,0,0,0.08)');
-  }
+	activeElementCss(){
+		this.el.css('background-color','rgba(0,0,0,0.08)');
+	}
 
-  deactiveElementCss(){
-    this.value = !this.value;
-    this.el.css('background-color','rgba(0,0,0,0)');
+	deactiveElementCss(){
+		this.el.css('background-color','rgba(0,0,0,0)');
 
-  }
+	}
 }

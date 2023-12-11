@@ -1,6 +1,11 @@
 import {h} from '../table/element';
-import {stylePrefix} from "@/components/table/config";
-import Bold from "@/components/table-toolbar/button/bold";
+import {stylePrefix} from "../table/config";
+import Bold from "../table-toolbar/button/bold";
+import Italic from "@views/report/tableComponent/table-toolbar/button/italic";
+import StrikeThrough from "@views/report/tableComponent/table-toolbar/button/strikeThrough";
+import Underline from "@views/report/tableComponent/table-toolbar/button/underline";
+import TextColor from "@views/report/tableComponent/table-toolbar/button/textColor";
+import Bgcolor from "@views/report/tableComponent/table-toolbar/button/bgcolor";
 export default class toolbar{
 	constructor(elementString,table) {
 		// 初始化格式
@@ -26,6 +31,7 @@ export default class toolbar{
 		// 接着画界面,
 		const container = typeof elementString === 'string' ? document.querySelector(elementString) : elementString;
 		if (container === null){
+      console.info('未获取到元素')
 			throw new Error('未获取到元素');
 		}
 		// 先把外框画出来
@@ -33,17 +39,45 @@ export default class toolbar{
 		console.log(width())
 		this.container = h(container,`${stylePrefix}-toolbar`).css({
 			width: width(),
+      // color:'#f6f6f6',
+      border:'1px solid #FFF',
+      'background-color':'#FFF',
+      display: 'flex',
 			// height:'50px'
 		});
 		// 接着把按钮一个个塞进来
 		// 这里放所有的按钮
 		this.buttons =[];
 
-		let bold = new Bold(this.style.bold)
+    // 粗体
+		let bold = new Bold(this.style.bold);
 		this.container.append(bold.el);
 		this.buttons.push(bold);
 
+    // 斜体
+    let italic = new Italic(this.style.italic);
+    this.container.append(italic.el);
+    this.buttons.push(italic);
 
+    // 下划线
+    let underline = new Underline(this.style.underline);
+    this.container.append(underline.el);
+    this.buttons.push(underline);
+
+    // 划线
+    let strikeThrough = new StrikeThrough(this.style.strikethrough);
+    this.container.append(strikeThrough.el);
+    this.buttons.push(strikeThrough);
+
+    // 字体颜色
+    let textColor = new TextColor(this.style.textColor);
+    this.container.append(textColor.el);
+    this.buttons.push(textColor);
+
+    // 背景颜色
+    let bgcolor = new Bgcolor(this.style.bgcolor);
+    this.container.append(bgcolor.el);
+    this.buttons.push(bgcolor);
 
 	};
 

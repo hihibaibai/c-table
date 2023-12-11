@@ -27,6 +27,7 @@ export default {
   methods:{
     foobar(){
       console.log(this.xs);
+      console.log(this.toolbar.getCurrentStyle());
       // this.init();
     },
     init(){

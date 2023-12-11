@@ -50,32 +50,32 @@ export default class toolbar{
 		this.buttons =[];
 
     // 粗体
-	let bold = new Bold(this.style.bold);
+	let bold = new Bold(this.style);
 	this.container.append(bold.el);
 	this.buttons.push(bold);
 
     // 斜体
-    let italic = new Italic(this.style.italic);
+    let italic = new Italic(this.style);
     this.container.append(italic.el);
     this.buttons.push(italic);
 
     // 下划线
-    let underline = new Underline(this.style.underline);
+    let underline = new Underline(this.style);
     this.container.append(underline.el);
     this.buttons.push(underline);
 
     // 划线
-    let strikeThrough = new StrikeThrough(this.style.strikethrough);
+    let strikeThrough = new StrikeThrough(this.style);
     this.container.append(strikeThrough.el);
     this.buttons.push(strikeThrough);
 
     // 字体颜色
-    let textColor = new TextColor(this.style.textColor);
+    let textColor = new TextColor(this.style);
     this.container.append(textColor.el);
     this.buttons.push(textColor);
 
     // 背景颜色
-    let bgcolor = new Bgcolor(this.style.bgcolor);
+    let bgcolor = new Bgcolor(this.style);
     this.container.append(bgcolor.el);
     this.buttons.push(bgcolor);
 

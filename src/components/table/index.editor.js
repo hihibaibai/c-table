@@ -44,10 +44,49 @@ function reset(t) {
     if (_selector) {
         const { _focusRange, _focusArea } = _selector;
         if (_focusRange && _focusArea) {
+            // debugger
             const { _rect, _target } = _focusArea;
             const { startRow, startCol } = _focusRange;
             const cell = t.getCell(startRow, startCol);
-            const editor = get(t, cell);
+            // 下面这行会录入更改的函数
+            let type = 'text';
+            if (cell instanceof Object && cell.type){
+                type = cell.type;
+            }
+            const _editors = t._editors;
+            // 这里的editor应该是./table/editor/text/index.js这个文件里面的
+            const editor = _editors.get(type);
+            if (cell && cell instanceof String){
+                editor._value = cell;
+            }
+            else if (cell){
+                editor._value = cell.value;
+            }
+            console.log('startRow',startRow)
+            console.log('startCol',startCol)
+            editor.changer((value) => {
+                t.setCell(startRow,startCol,value).render();
+                // if (value !== null) {
+                // _selector.clearCopy();
+                // const { _ranges } = _selector;
+                // _ranges.forEach((it) => {
+                //     if (it) {
+                //         it.each((r, c) => {
+                //             t.setCell(r, c, value);
+                //         });
+                //     }
+                // });
+                // t.render();
+                // selector.setCellValue(t, value);
+                // }
+            });
+            editor.moveChanger((direction) => {
+                const { _selector } = t;
+                if (direction !== 'none' && _selector) {
+                    selector.move(t, true, direction, 1);
+                    t._canvas.focus();
+                }
+            });
             t._editor = editor;
             if (editor && _rect && _target) {
                 console.log('row:', startRow, ', col:', startCol, ', rect:', _rect);

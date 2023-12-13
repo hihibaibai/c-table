@@ -168,7 +168,15 @@ function renderArea(type, canvas, area, renderer) {
     area.each((r, c, rect) => {
         if (!cellMerges.has(`${r}_${c}`)) {
             const cellv = cell(r, c);
-            _render(cellv, rect, mergeCellStyle(r, c, cellv));
+            // _render(cellv, rect, mergeCellStyle(r, c, cellv));
+            if (type === 'body') {
+                renderCellGridline(canvas, gridline, rect);
+                cellRender(canvas, cellv, rect, mergeCellStyle(r, c, cellv), cellRenderer, formatter);
+            }
+            else {
+                cellRender(canvas, cellv, rect, mergeCellStyle(r, c, cellv), cellRenderer, formatter);
+                renderCellGridline(canvas, gridline, rect);
+            }
         }
     });
     // render merges

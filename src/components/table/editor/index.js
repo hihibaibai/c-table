@@ -28,7 +28,7 @@ export default class Editor {
         return this;
     }
     changed() {
-        this._changer(this._value);
+        // this._changer(this._value);
         this.hide();
     }
     rect(rect) {

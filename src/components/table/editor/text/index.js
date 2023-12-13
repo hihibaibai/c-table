@@ -2,9 +2,14 @@ import { h } from '../../element';
 import { borderWidth, stylePrefix } from '../../config';
 import Editor from '..';
 import { cellValueString } from '../../data';
-export default class TextEditor extends Editor {
+export default class TextEditor {
     constructor() {
-        super(`${stylePrefix}-editor`);
+        this._target = null;
+        this._rect = null;
+        this._visible = false;
+        this._moveChanger = () => { };
+        this._changer = () => { };
+        this._ = h('div', `${stylePrefix}-editor`);
         this._text = h('textarea', '');
         this._textMeasure = h('div', 'measure');
         this._editing = false;
@@ -22,15 +27,38 @@ export default class TextEditor extends Editor {
             resizeSize(this);
         });
     }
-    value(v) {
-        super.value(v);
-        this._text.value(cellValueString(v) || '');
+    get visible() {
+        return this._visible;
+    }
+    target(target) {
+        target.append(this._);
+        this._target = target;
+        return this;
+    }
+    cellIndex(r, c) {
+        return this;
+    }
+    value(value) {
+        this._value = value;
+        this._text.value(cellValueString(value) || '');
         resizeSize(this);
         return this;
     }
+    changed() {
+        // this._changer(this._value);
+        this.hide();
+    }
     rect(rect) {
-        super.rect(rect);
         if (rect) {
+            this._visible = true;
+            this._rect = rect;
+            const { x, y, width, height } = rect;
+            this._.css({
+                left: x - borderWidth / 2,
+                top: y - borderWidth / 2,
+                width: width - borderWidth,
+                height: height - borderWidth,
+            }).show();
             setTimeout(() => {
                 const { _value } = this;
                 let position = 0;
@@ -44,9 +72,23 @@ export default class TextEditor extends Editor {
         }
         return this;
     }
+    show() {
+        this._.show();
+        return this;
+    }
     hide() {
-        super.hide();
+        this._visible = false;
+        this.value('');
+        this._.hide();
         this._editing = false;
+        return this;
+    }
+    moveChanger(value) {
+        this._moveChanger = value;
+        return this;
+    }
+    changer(value) {
+        this._changer = value;
         return this;
     }
 }
@@ -85,7 +127,7 @@ function keydownHandler(editor, evt) {
         editor._moveChanger(direction);
         editor.hide();
     };
-    console.log('code:', code, shiftKey, ctrlKey);
+    // console.log('code:', code, shiftKey, ctrlKey);
     if (code === 'Enter') {
         if (ctrlKey || metaKey || altKey) {
             target.value += '\n';

@@ -65,6 +65,7 @@ function setCellValue(t, value) {
                 });
             }
         });
+        // 要注意，render的时候使用的是table中_data中的数据，而setCell只会更改_cells中的数据。所以在这里要额外把值赋给_data
         t.render();
     }
 }

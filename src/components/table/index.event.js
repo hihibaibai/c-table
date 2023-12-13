@@ -19,6 +19,7 @@ function mousedownHandler(t, evt) {
     // console.log('evt:', evt);
     const { _selector, _renderer, _editor, _emitter } = t;
     const { viewport } = _renderer;
+  // console.log(_editor)
     if (_editor) {
         _editor.changed();
     }
@@ -27,7 +28,7 @@ function mousedownHandler(t, evt) {
         // 获取
         const { offsetX, offsetY, ctrlKey, metaKey, shiftKey } = evt;
         const vcell = viewport.cellAt(offsetX, offsetY);
-      console.log(vcell);
+      // console.log(vcell);
         if (vcell) {
             _emitter.emit('click', vcell, evt);
             const { placement, row, col } = vcell;

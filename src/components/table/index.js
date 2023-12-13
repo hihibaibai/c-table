@@ -2,7 +2,9 @@ import './style.index.less';
 import { stylePrefix } from './config';
 import { h } from './element';
 import Overlayer from './overlayer';
-import TableRenderer, { Range, expr2xy, } from '../table-renderer';
+import TableRenderer from '../table-renderer/index';
+import Range from '../table-renderer/range';
+import expr2expr from "../table-renderer/alphabet";
 import { defaultData, row, col, colsWidth, rowsHeight, rowHeight, colWidth, merge, unmerge, isMerged, cellValue, Cells, addStyle, clearStyles, addBorder, clearBorder, clearBorders, cellValueString, isLastRow, isLastCol, copy, } from './data';
 import resizer from './index.resizer';
 import scrollbar from './index.scrollbar';
@@ -229,20 +231,20 @@ export default class Table {
         clearBorders(this._data);
         return this;
     }
-    cell(row, col, value) {
+    setCell(row, col, value) {
         const { _cells } = this;
-        if (value) {
             _cells.set(row, col, value);
             return this;
-        }
-        const v = _cells.get(row, col);
-        return v != null ? v[2] : v;
+    }
+    getCell(row,col){
+      const v = this._cells.get(row, col);
+      return v != null ? v[2] : v;
     }
     cellValue(row, col) {
-        return cellValue(this.cell(row, col));
+        return cellValue(this.getCell(row, col));
     }
     cellValueString(row, col) {
-        return cellValueString(this.cell(row, col));
+        return cellValueString(this.getCell(row, col));
     }
     render() {
         const { _data, _renderer, _overlayer } = this;
@@ -263,7 +265,7 @@ export default class Table {
             .row((index) => row(_data, index))
             .col((index) => col(_data, index))
             .cell((r, c) => {
-            return this.cell(r, c);
+            return this.getCell(r, c);
         })
             .formatter(this._cells._formatter)
             .render();
@@ -288,7 +290,9 @@ export default class Table {
             return this;
         }
         else {
-            return this._data;
+          // 修复获取数据的时候没有单元格数据的问题
+          this._data.cells = this._cells.download();
+          return this._data;
         }
     }
     /**

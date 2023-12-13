@@ -1,14 +1,16 @@
 import selector from './index.selector';
 function get(t, cell) {
     let type = 'text';
-    if (cell instanceof Object && cell.type)
-        type = cell.type;
+    if (cell instanceof Object && cell.type){
+      type = cell.type;
+    }
     const { _editors } = t;
     const editor = _editors.get(type);
+    // debugger
     editor.changer((value) => {
-        if (value !== null) {
+        // if (value !== null) {
             selector.setCellValue(t, value);
-        }
+        // }
     });
     editor.moveChanger((direction) => {
         const { _selector } = t;
@@ -37,13 +39,14 @@ function move(t) {
     }
 }
 function reset(t) {
+  // debugger
     const { _selector } = t;
     if (_selector) {
         const { _focusRange, _focusArea } = _selector;
         if (_focusRange && _focusArea) {
             const { _rect, _target } = _focusArea;
             const { startRow, startCol } = _focusRange;
-            const cell = t.cell(startRow, startCol);
+            const cell = t.getCell(startRow, startCol);
             const editor = get(t, cell);
             t._editor = editor;
             if (editor && _rect && _target) {

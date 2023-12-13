@@ -51,15 +51,17 @@ function init(t) {
     });
 }
 function setCellValue(t, value) {
+  // debugger
     const { _selector } = t;
     if (_selector) {
         _selector.clearCopy();
         const { _ranges } = _selector;
         // console.log('ranges:', _ranges, value);
+
         _ranges.forEach((it) => {
             if (it) {
                 it.each((r, c) => {
-                    t.cell(r, c, value);
+                    t.setCell(r, c, value);
                 });
             }
         });

@@ -20,6 +20,9 @@ export default class Cells {
             this.resetIndexes();
         }
     }
+    download(){
+      return this.cellData;
+    }
     get(row, col) {
         const { _indexes } = this;
         if (_indexes.has(row)) {
@@ -45,7 +48,8 @@ export default class Cells {
     }
     set(row, col, cell) {
         let oldData = this.get(row, col);
-        if (oldData === null) {
+      console.log(oldData)
+        if (oldData == null) {
             if (cell !== null && cell !== undefined) {
                 const index = this.cellData.push([row, col, cell]) - 1;
                 this.updateIndex(row, col, index);

@@ -1,6 +1,6 @@
 import {stylePrefix} from "../../table/config";
 import {h} from "../../table/element";
-import colorPlatte from "@/components/table-toolbar/button/colorPlatte";
+import colorPlatte from "./colorPlatte";
 
 const icon =
     '      <svg width="18" height="18" style="display: block;margin: auto">\n' +

@@ -76,7 +76,7 @@ export function toHtml(t, from) {
     fromRange.eachRow((r) => {
         htmlStr += `<tr style="height: ${t.rowHeight(r)}px;">`;
         fromRange.eachCol((c) => {
-            const cell = t.cell(r, c);
+            const cell = t.getCell(r, c);
             const cellRange = Range.create(r, c);
             let isMerged = false;
             let [rowspan, colspan] = [1, 1];
@@ -247,7 +247,7 @@ export function fromHtml(t, html, [toStartRow, toStartCol]) {
                     cell.value = text;
                 }
                 if (Object.keys(cell).length > 0) {
-                    t.cell(r, c, cell);
+                    t.setCell(r, c, cell);
                 }
             }
             if (prevBorder != null) {

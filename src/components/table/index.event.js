@@ -27,6 +27,7 @@ function mousedownHandler(t, evt) {
         // 获取
         const { offsetX, offsetY, ctrlKey, metaKey, shiftKey } = evt;
         const vcell = viewport.cellAt(offsetX, offsetY);
+      console.log(vcell);
         if (vcell) {
             _emitter.emit('click', vcell, evt);
             const { placement, row, col } = vcell;
@@ -93,7 +94,7 @@ function wheelHandler(t, evt) {
 }
 function keydownHandler(t, evt) {
     const { ctrlKey, shiftKey, metaKey, altKey, code } = evt;
-    // console.log('code:', code, evt);
+    console.log('code:', code, evt);
     let direction = null;
     if (code === 'Enter' && !ctrlKey && !metaKey && !altKey) {
         if (shiftKey) {

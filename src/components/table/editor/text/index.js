@@ -17,6 +17,7 @@ export default class TextEditor extends Editor {
             const { value } = target;
             this._editing = true;
             this._value = value;
+            // debugger
             this._changer(value);
             resizeSize(this);
         });
@@ -84,7 +85,7 @@ function keydownHandler(editor, evt) {
         editor._moveChanger(direction);
         editor.hide();
     };
-    // console.log('code:', code, shiftKey, ctrlKey, isComposing);
+    console.log('code:', code, shiftKey, ctrlKey);
     if (code === 'Enter') {
         if (ctrlKey || metaKey || altKey) {
             target.value += '\n';

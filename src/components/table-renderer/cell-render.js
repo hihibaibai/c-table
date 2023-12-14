@@ -129,9 +129,10 @@ export function cellRender(canvas, cell, rect, style, cellRenderer, formatter) {
             text = formatter(`${cell}`);
         }
         else {
-            text = formatter((cell.value || '') + '', cell.format);
+            text = formatter((cell[2].value || '') + '', cell[2].format);
         }
     }
+  // console.log(style)
     const { fontSize, fontFamily, bold, italic, color, bgcolor, align, valign, underline, strikethrough, rotate, textwrap, padding, } = style;
     // at first move to (left, top)
     canvas.save().beginPath().translate(rect.x, rect.y);

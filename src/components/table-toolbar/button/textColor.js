@@ -25,6 +25,7 @@ export default class TextColor {
 		this.change = (colorString) => {
 			style.color = colorString;
 		};
+    this.changeColor(this.value);
 	}
 
 	element() {

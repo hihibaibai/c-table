@@ -15,15 +15,16 @@ export default class Bgcolor {
     this.el = this.element();
     this.colorPlatte = new colorPlatte(this);
     this.colorPlatte.el.css({display: 'none'});
-    this.el._.append(this.colorPlatte.el._);
-    console.log(this.el._)
-    this.el._.setAttribute('tabindex', '-1')
+    this.el.element().append(this.colorPlatte.el.element());
+    // console.log(this.el._)
+    this.el.element().setAttribute('tabindex', '-1')
     this.el.on('blur', (evt) => {
       this.inactiveElementCss();
     })
     this.change = (colorString) => {
       style.bgcolor = colorString;
     };
+    this.changeColor(this.value);
   }
 
   element() {

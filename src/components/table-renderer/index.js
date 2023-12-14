@@ -221,6 +221,7 @@ export default class TableRenderer {
     }
     styles(value) {
         this._styles = value;
+        // this._bgcolor = value.bgcolor?;
         return this;
     }
     borders(value) {

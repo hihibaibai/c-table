@@ -39,6 +39,7 @@ export default class ColorPlatte {
 				td.addEventListener('click', (evt) => {
 					that.color = colorGrid[i][j];
 					this.icon.changeColor(that.color);
+          this.icon.inactiveElementCss();
 					evt.stopPropagation();
 					// console.log('clicked')
 				});
@@ -46,8 +47,8 @@ export default class ColorPlatte {
 			}
 			tbody.append(tr);
 		}
-		this.table._.append(tbody);
-		this.el._.append(this.table._);
+		this.table.element().append(tbody);
+		this.el.element().append(this.table._);
 		return this;
 	}
 }

@@ -102,6 +102,7 @@ function renderArea(type, canvas, area, renderer) {
         ({ cell, merges, cellRenderer } = _colHeader);
     }
     else {
+      // console.log(renderer)
         cell = renderer._cell;
         cellRenderer = renderer._cellRenderer;
         formatter = renderer._formatter;
@@ -116,7 +117,7 @@ function renderArea(type, canvas, area, renderer) {
     canvas
         .save()
         .translate(area.x, area.y)
-        .prop('fillStyle', renderer._bgcolor)
+        .prop('fillStyle', style.bgcolor? style.bgcolor: renderer._bgcolor)
         .rect(0, 0, area.width, area.height)
         .fill()
         .clip();
@@ -132,8 +133,8 @@ function renderArea(type, canvas, area, renderer) {
             if (c1 && c1.style !== undefined)
                 Object.assign(cstyle, styles[c1.style]);
         }
-        if (ce instanceof Object && ce.style !== undefined) {
-            Object.assign(cstyle, styles[ce.style]);
+        if (ce instanceof Object && ce[2].style !== undefined) {
+            Object.assign(cstyle, styles[ce[2].style]);
         }
         return cstyle;
     };

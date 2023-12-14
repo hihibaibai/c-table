@@ -12,19 +12,19 @@ export default class toolbar{
 		this.style={
 			bold:false,
 			italic:false,
-			size:12,
-			align:'center',
+      fontSize:10,
+			align:'left',//center,left,right
 			valign:'middle',
 			underline:false,
 			strikethrough:false,
-			color:'#000',
-			bgcolor:'#f0f0f0',
-			border:{//这个是单元格边框的格式
-				top:["thin","#000"],//第一个字符串表示线的粗细 可选为thin medium thick dashed dotted。第二个字符串表示线的颜色，使用16进制颜色表示
-				left:["thin","#000"],//同上
-				right:["thin","#000"],//同上
-				bottom:["thin","#000"]//同上
-			},
+			color:'#0a0a0a',
+			bgcolor:'#FFF',
+			// border:{//这个是单元格边框的格式
+			// 	top:["thin","#000"],//第一个字符串表示线的粗细 可选为thin medium thick dashed dotted。第二个字符串表示线的颜色，使用16进制颜色表示
+			// 	left:["thin","#000"],//同上
+			// 	right:["thin","#000"],//同上
+			// 	bottom:["thin","#000"]//同上
+			// },
 		};
 
 		this.container = null;
@@ -79,11 +79,18 @@ export default class toolbar{
     this.container.append(bgcolor.el);
     this.buttons.push(bgcolor);
 
+    // 在table组件内注入格式，这样在输入字符的时候就有格式可用了。
+    table.currentStyle = this.style;
 	};
 
 	getCurrentStyle(){
 		return this.style;
 	}
+
+  // 下面这个函数是用来监听内部的按钮是不是被按的，这样的话就能够根据选择的单元格更改他的格式了
+  styleChanged(){
+
+  }
 
 	static create(elementString, table) {
 		return new toolbar(elementString, table);

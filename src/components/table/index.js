@@ -18,7 +18,6 @@ import {
   isMerged,
   cellValue,
   Cells,
-  addStyle,
   clearStyles,
   addBorder,
   clearBorder,
@@ -33,7 +32,7 @@ import scrollbar from './index.scrollbar';
 import selector from './index.selector';
 import {initEvents} from './index.event';
 import {fromHtml, toHtml} from './index.html';
-import {getStyle} from './data/style';
+import {addStyle, getStyle,getStyleIndex} from './data/style';
 import {EventEmitter} from './event';
 import TextEditor from './editor/text';
 
@@ -62,6 +61,7 @@ export default class Table {
     this._emitter = new EventEmitter();
     this._width = width;
     this._height = height;
+    this.currentStyle = null;
     const container = typeof element === 'string' ? document.querySelector(element) : element;
     if (container === null)
       throw new Error('未获取到元素');
@@ -258,6 +258,10 @@ export default class Table {
     return addStyle(this._data, value);
   }
 
+  getStyleIndex(value){
+    return getStyleIndex(this._data,value);
+  }
+
   clearStyles() {
     clearStyles(this._data);
     return this;
@@ -287,8 +291,8 @@ export default class Table {
 
   getCell(row, col) {
     const v = this._cells.get(row, col);
-    return v != null ? v[2] : v;
-    // return v != null ? v : [row,col,{value:''}];
+    // return v != null ? v[2] : v;
+    return v != null ? v : [row,col,{value:''}];
   }
 
   cellValue(row, col) {
@@ -322,6 +326,8 @@ export default class Table {
         })
         .formatter(this._cells._formatter)
         .render();
+    console.log(_renderer);
+
     // viewport
     const {viewport} = _renderer;
     if (viewport) {

@@ -88,7 +88,7 @@ function unionRange(t, r, c) {
     }
 }
 function reset(t) {
-    const { _selector, _overlayer } = t;
+    const { _selector, _overlayer, currentStyle } = t;
     const { _rowHeader, _colHeader, viewport } = t._renderer;
     if (_selector && viewport) {
         const { _placement } = _selector;
@@ -218,6 +218,14 @@ function reset(t) {
                 }
             }
         });
+    }
+    // 如果界面上面有按钮的话，那么这里就得将单元格的格式复制到currentStyles里面，注意不能浅拷贝，不然的话会影响其他的单元格。
+    if (currentStyle){
+      const rowIndex = _selector._focus[0];
+      const colIndex = _selector._focus[1];
+      console.log(rowIndex,colIndex)
+      console.log(t.style(t.getCell(rowIndex, colIndex)[2].style))
+      Object.assign(currentStyle,t.style(t.getCell(rowIndex, colIndex)[2].style));
     }
 }
 function moveAutofill(t, direction) {

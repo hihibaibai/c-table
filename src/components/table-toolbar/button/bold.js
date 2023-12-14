@@ -7,13 +7,15 @@ const icon =
 		'</svg>';
 
 export default class Bold {
-	constructor(style) {
+	constructor(toolbar) {
+		this.toolbar = toolbar;
 		this.tag = 'bold';
-		this.value = style.bold;
+		this.value = toolbar.style.bold;
 		this.active = false;
 		this.el = this.element();
 		this.change = (value) => {
-			style.bold = value;
+			toolbar.style.bold = value;
+			toolbar.styleChanged();
 		};
 	}
 
@@ -41,6 +43,19 @@ export default class Bold {
 		// 	tooltip(tip, evt.target);
 		// })
 		// .attr('data-tooltip', tip);
+	}
+
+	// 这个函数是用来更新绑定的值与对应的状态的。
+	updateValue(style){
+		this.value = style.bold;
+		if (this.value){
+			this.active = true;
+			this.el.css('background-color', 'rgba(0,0,0,0.08)');
+		}
+		else {
+			this.active = false;
+			this.el.css('background-color', 'rgba(0,0,0,0)');
+		}
 	}
 
 	activeElementCss() {

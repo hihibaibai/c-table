@@ -7,13 +7,14 @@ const icon =
     '    </svg>';
 
 export default class Italic {
-  constructor(style) {
+  constructor(toolbar) {
     this.tag = 'italic';
-    this.value = style.italic;
+    this.value = toolbar.style.italic;
     this.active = false;
     this.el = this.element();
     this.change = (value) => {
-      style.italic = value;
+      toolbar.style.italic = value;
+      toolbar.styleChanged();
     };
   }
 
@@ -41,6 +42,19 @@ export default class Italic {
     // 	tooltip(tip, evt.target);
     // })
     // .attr('data-tooltip', tip);
+  }
+
+  // 这个函数是用来更新绑定的值与对应的状态的。
+  updateValue(style){
+    this.value = style.italic;
+    if (this.value){
+      this.active = true;
+      this.el.css('background-color', 'rgba(0,0,0,0.08)');
+    }
+    else {
+      this.active = false;
+      this.el.css('background-color', 'rgba(0,0,0,0)');
+    }
   }
 
   activeElementCss() {

@@ -18,6 +18,7 @@ export function defaultData() {
         colWidth: 100,
         scroll: [0, 0, 0, 0],
         style: {
+            bgcolor: '#FFF',
             color: '#333',
             align: 'left',
             valign: 'middle',

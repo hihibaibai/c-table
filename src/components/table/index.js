@@ -61,7 +61,7 @@ export default class Table {
     this._emitter = new EventEmitter();
     this._width = width;
     this._height = height;
-    this.currentStyle = null;
+    this.toolbarStyle = null;
     const container = typeof element === 'string' ? document.querySelector(element) : element;
     if (container === null)
       throw new Error('未获取到元素');

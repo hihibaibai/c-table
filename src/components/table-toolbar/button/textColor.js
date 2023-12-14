@@ -9,9 +9,10 @@ const icon =
 
 
 export default class TextColor {
-	constructor(style) {
+	constructor(toolbar) {
+		this.toolbar = toolbar;
 		this.tag = 'textColor';
-		this.value = style.color;
+		this.value = toolbar.style.color;
 		this.active = false;
 		this.el = this.element();
 		this.colorPlatte = new colorPlatte(this);
@@ -23,9 +24,9 @@ export default class TextColor {
 			this.inactiveElementCss();
 		})
 		this.change = (colorString) => {
-			style.color = colorString;
+			this.el._.getElementsByTagName('path')[0].setAttribute('fill', colorString);
+			toolbar.style.color = colorString;
 		};
-    this.changeColor(this.value);
 	}
 
 	element() {
@@ -55,6 +56,17 @@ export default class TextColor {
 		// .attr('data-tooltip', tip);
 	}
 
+	// 这个函数是用来更新绑定的值与对应的状态的。
+	updateValue(style){
+		console.log(style)
+		let colorString = '#FFF'
+		if (style.color){
+			colorString = style.color;
+		}
+		this.value = colorString;
+		this.change(this.value);
+	}
+
 	activeElementCss() {
 		// console.log('active')
 		this.active = !this.active;
@@ -70,7 +82,8 @@ export default class TextColor {
 	}
 
 	changeColor(colorString){
-		this.change(colorString);
+		this.toolbar.style.color = colorString;
+		this.toolbar.styleChanged();
 		this.el._.getElementsByTagName('path')[0].setAttribute('fill', colorString);
 	}
 }

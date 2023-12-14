@@ -27,9 +27,9 @@ export default {
 	},
 	methods: {
 		foobar() {
-			// console.log(this.xs);
-			this.xs.data(this.xs.data())
-			console.log(this.xs.data());
+			console.log(this.xs);
+			// this.xs.data(this.xs.data())
+			// console.log(this.xs.data());
 			// console.log(this.toolbar.getCurrentStyle());
 			// this.init();
 		},

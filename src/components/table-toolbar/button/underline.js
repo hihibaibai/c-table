@@ -7,13 +7,14 @@ const icon =
     '    </svg>';
 
 export default class Underline {
-  constructor(style) {
+  constructor(toolbar) {
     this.tag = 'underline';
-    this.value = style.underline;
+    this.value = toolbar.style.underline;
     this.active = false;
     this.el = this.element();
     this.change = (value) => {
-      style.underline = value;
+      toolbar.style.underline = value;
+      toolbar.styleChanged();
     };
   }
 
@@ -41,6 +42,19 @@ export default class Underline {
     // 	tooltip(tip, evt.target);
     // })
     // .attr('data-tooltip', tip);
+  }
+
+  // 这个函数是用来更新绑定的值与对应的状态的。
+  updateValue(style){
+    this.value = style.underline;
+    if (this.value){
+      this.active = true;
+      this.el.css('background-color', 'rgba(0,0,0,0.08)');
+    }
+    else {
+      this.active = false;
+      this.el.css('background-color', 'rgba(0,0,0,0)');
+    }
   }
 
   activeElementCss() {

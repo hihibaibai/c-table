@@ -4,13 +4,14 @@ import colorPlatte from "./colorPlatte";
 
 const icon =
     '      <svg width="18" height="18" style="display: block;margin: auto">\n' +
-    '        <rect fill="#000000" stroke="black" stroke-width="1" width="16" height="16"></rect>\n' +
+    '        <rect fill="#FFF" stroke="black" stroke-width="1" width="16" height="16"></rect>\n' +
     '      </svg>';
 
 export default class Bgcolor {
-  constructor(style) {
+  constructor(toolbar) {
+    this.toolbar = toolbar;
     this.tag = 'bgcolor';
-    this.value = style.bgcolor;
+    this.value = toolbar.style.bgcolor;
     this.active = false;
     this.el = this.element();
     this.colorPlatte = new colorPlatte(this);
@@ -22,9 +23,10 @@ export default class Bgcolor {
       this.inactiveElementCss();
     })
     this.change = (colorString) => {
-      style.bgcolor = colorString;
+      console.log(colorString);
+      this.el._.getElementsByTagName('rect')[0].setAttribute('fill', colorString);
+      toolbar.style.bgcolor = colorString;
     };
-    this.changeColor(this.value);
   }
 
   element() {
@@ -54,6 +56,17 @@ export default class Bgcolor {
     // .attr('data-tooltip', tip);
   }
 
+  // 这个函数是用来更新绑定的值与对应的状态的。
+  updateValue(style){
+    console.log(style)
+    let colorString = '#FFF'
+    if (style.bgcolor){
+      colorString = style.bgcolor;
+    }
+    this.value = colorString;
+    this.change(this.value);
+  }
+
   activeElementCss() {
     // console.log('active')
     this.active = !this.active;
@@ -69,7 +82,8 @@ export default class Bgcolor {
   }
 
   changeColor(colorString) {
-    this.change(colorString);
+    this.toolbar.style.bgcolor = colorString;
+    this.toolbar.styleChanged();
     this.el._.getElementsByTagName('rect')[0].setAttribute('fill', colorString);
   }
 }

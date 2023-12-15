@@ -268,6 +268,7 @@ export default class Table {
   }
 
   addBorder(...value) {
+    console.log('addBorder',value);
     addBorder(this._data, value);
     return this;
   }
@@ -326,7 +327,7 @@ export default class Table {
         })
         .formatter(this._cells._formatter)
         .render();
-    console.log(_renderer);
+    console.log('renderer',_renderer);
 
     // viewport
     const {viewport} = _renderer;

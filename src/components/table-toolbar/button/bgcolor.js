@@ -69,14 +69,14 @@ export default class Bgcolor {
 
   activeElementCss() {
     // console.log('active')
-    this.active = !this.active;
+    this.active = true;
     this.el.css('background-color', 'rgba(0,0,0,0.08)');
     this.colorPlatte.el.css({display: 'block'});
   }
 
   inactiveElementCss() {
     // console.log('inactive')
-    this.active = !this.active;
+    this.active = false;
     this.el.css('background-color', 'rgba(0,0,0,0)');
     this.colorPlatte.el.css({display: 'none'});
   }

@@ -6,7 +6,6 @@ import StrikeThrough from "../table-toolbar/button/strikeThrough";
 import Underline from "../table-toolbar/button/underline";
 import TextColor from "../table-toolbar/button/textColor";
 import Bgcolor from "../table-toolbar/button/bgcolor";
-import {map} from "core-js/internals/array-iteration";
 
 export default class toolbar {
   constructor(elementString, table) {
@@ -21,13 +20,17 @@ export default class toolbar {
       strikethrough: false,
       color: '#0a0a0a',
       bgcolor: '#FFF',
-      // border:{//这个是单元格边框的格式
-      // 	top:["thin","#000"],//第一个字符串表示线的粗细 可选为thin medium thick dashed dotted。第二个字符串表示线的颜色，使用16进制颜色表示
-      // 	left:["thin","#000"],//同上
-      // 	right:["thin","#000"],//同上
-      // 	bottom:["thin","#000"]//同上
-      // },
+      border:{//这个是单元格边框的格式
+      	// top:["thin","#000"],//第一个字符串表示线的粗细 可选为thin medium thick dashed dotted。第二个字符串表示线的颜色，使用16进制颜色表示
+      	// left:["thin","#000"],//同上
+      	// right:["thin","#000"],//同上
+      	// bottom:["thin","#000"]//同上
+      },
     };
+    this.border = [];//'A1:B2', 'all', 'medium', '#21ba45' 这个array里面的第一个是用selector算出来的，剩下的是设置里面确定的
+    // 第二个变量有10个可选值
+    //'outside','all','left','top','right','bottom','inside','horizontal','vertical','none'
+    this.merge = true;
     this._table = table
 
     this.container = null;
@@ -103,7 +106,7 @@ export default class toolbar {
 
   // 下面这个函数是用来监听内部的按钮是不是被按的，这样的话就能够根据选择的单元格更改他的格式了
   styleChanged() {
-    const focusRange = this._table._selector._ranges[this._table._selector._ranges.length-1];
+    const focusRange = this._table._selector.currentRange;
     const startCol = focusRange.startCol;
     const endCol = focusRange.endCol;
     const startRow = focusRange.startRow;
@@ -128,7 +131,6 @@ export default class toolbar {
       row[0] = startRow;
       row[1] = endRow;
     }
-    let cellList = [];
     for (let i = row[0]; i <= row[1]; i++){
       for (let j = col[0]; j <= col[1]; j++){
         let cell = this._table.getCell(i,j);
@@ -139,6 +141,7 @@ export default class toolbar {
         // console.log(cell)
       }
     }
+    // 这里要处理比较特殊的merge和表格边框
     this._table.render();
   }
 

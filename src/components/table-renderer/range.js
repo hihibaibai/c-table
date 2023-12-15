@@ -217,7 +217,7 @@ export default class Range {
 export function eachRanges(refs, cb) {
     if (refs && refs.length > 0) {
         refs.forEach((ref) => {
-            cb(Range.with(ref));
+            cb(Range.with(ref));// 这里的Range.with()函数会返回一个Range对象 也就是本文件的default class
         });
     }
 }

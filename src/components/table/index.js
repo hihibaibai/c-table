@@ -267,7 +267,7 @@ export default class Table {
     return this;
   }
 
-  addBorder(...value) {
+  addBorder(value) {
     console.log('addBorder',value);
     addBorder(this._data, value);
     return this;

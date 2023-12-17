@@ -1,21 +1,21 @@
 import { equals } from '../helper';
-export function addStyle(t, value) {
-    if (!t.styles)
-        t.styles = [];
+export function addStyle(tableData, value) {
+    if (!tableData.styles)
+        tableData.styles = [];
     if (value) {
-        for (let i = 0; i < t.styles.length; i += 1) {
-            const it = t.styles[i];
+        for (let i = 0; i < tableData.styles.length; i += 1) {
+            const it = tableData.styles[i];
             if (equals(it, value)) {
                 return i;
             }
         }
     }
-    return t.styles.push(value) - 1;
+    return tableData.styles.push(value) - 1;
 }
-export function getStyle(t, index, withDefault = true) {
-    const style = t.styles[index];
+export function getStyle(tableData, index, withDefault = true) {
+    const style = tableData.styles[index];
     if (withDefault) {
-        return Object.assign({}, t.style, t.styles[index] || {});
+        return Object.assign({}, tableData.style, tableData.styles[index] || {});
     }
     return style;
 }
@@ -39,6 +39,6 @@ export function getStyleIndex(tableData,value){
   }
 }
 
-export function clearStyles(t) {
-    t.styles.length = 0;
+export function clearStyles(tableData) {
+    tableData.styles.length = 0;
 }

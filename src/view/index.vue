@@ -28,6 +28,12 @@ export default {
 	methods: {
 		foobar() {
 			console.log(this.xs);
+			// this.xs.addBorder('A2:A3', 'left', 'medium', '#21ba45').render();
+			this.xs.addStyle({bold:true});
+			this.xs.addBorder({left: ['medium', '#21ba45'], top:['medium', '#21ba45']})
+
+			// debugger;
+			this.xs.setCell(0,0,{value:'11111',border:0,style:0}).render();
 			// this.xs.data(this.xs.data())
 			// console.log(this.xs.data());
 			// console.log(this.toolbar.getCurrentStyle());

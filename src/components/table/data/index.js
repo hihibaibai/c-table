@@ -2,7 +2,7 @@ import Cells, {cellValue, cellValueString} from './cells';
 import {scrollx, scrolly, scrollResetRows, scrollResetCols} from './scroll';
 import {isMerged, merge, unmerge, rangeUnoinMerges} from './merge';
 import {addStyle, clearStyles} from './style';
-import {addBorder, clearBorder, clearBorders} from './border';
+import {addBorder} from './border';
 import {col, colWidth, colsWidth, isLastCol, stepColIndex} from './col';
 import {row, rowHeight, rowsHeight, isLastRow, stepRowIndex} from './row';
 import {copy} from './copy';
@@ -23,7 +23,7 @@ export function defaultData() {
       color: '#333',
       align: 'left',
       valign: 'middle',
-      textwrap: true,
+      textwrap: false,
       bold: false,
       italic: false,
       fontFamily: 'Roboto',
@@ -47,8 +47,8 @@ export {
   addStyle,
   clearStyles,
   addBorder,
-  clearBorder,
-  clearBorders,
+  // clearBorder,
+  // clearBorders,
   col,
   colWidth,
   colsWidth,

@@ -1,11 +1,14 @@
 import {h} from '../table/element';
 import {stylePrefix} from "../table/config";
+import { expr2xy, xy2expr } from '../table-renderer/alphabet';
 import Bold from "../table-toolbar/button/bold";
 import Italic from "../table-toolbar/button/italic";
 import StrikeThrough from "../table-toolbar/button/strikeThrough";
 import Underline from "../table-toolbar/button/underline";
 import TextColor from "../table-toolbar/button/textColor";
 import Bgcolor from "../table-toolbar/button/bgcolor";
+import Textwrap from "../table-toolbar/button/textwrap";
+import Merge from "../table-toolbar/button/merge";
 
 export default class toolbar {
   constructor(elementString, table) {
@@ -85,6 +88,15 @@ export default class toolbar {
     this.container.append(bgcolor.el);
     this.buttons.set("bgcolor", bgcolor);
 
+    // 自动换行
+    let textwrap = new Textwrap(this);
+    this.container.append(textwrap.el);
+    this.buttons.set("textwrap", textwrap);
+
+    // 合并
+    let merge = new Merge(this);
+    this.container.append(merge.el);
+    this.buttons.set("merge",merge);
     // 在table组件内注入格式，这样在输入字符的时候就有格式可用了。
     table.toolbarStyle = this;
   };
@@ -106,43 +118,73 @@ export default class toolbar {
 
   // 下面这个函数是用来监听内部的按钮是不是被按的，这样的话就能够根据选择的单元格更改他的格式了
   styleChanged() {
-    const focusRange = this._table._selector.currentRange;
-    const startCol = focusRange.startCol;
-    const endCol = focusRange.endCol;
-    const startRow = focusRange.startRow;
-    const endRow = focusRange.endRow;
-    // 这边是批量更改，而且要考虑到startCol会比endCol小
-    // 先把所有单元格都找出来吧
-    let row = [];
-    let col = [];
-    if (startCol>endCol){
-      col[0] = endCol;
-      col[1] = startCol;
-    }
-    else {
-      col[0] = startCol;
-      col[1] = endCol;
-    }
-    if (startRow>endRow){
-      row[0] = endRow;
-      row[1] = startRow;
-    }
-    else {
-      row[0] = startRow;
-      row[1] = endRow;
-    }
-    for (let i = row[0]; i <= row[1]; i++){
-      for (let j = col[0]; j <= col[1]; j++){
-        let cell = this._table.getCell(i,j);
-        let styleIndex = this._table.addStyle(this.style);
-        // 因为这里改的是对象里面的变量，所以不需要额外再设置了，直接渲染就有效果
-        cell[2].style = styleIndex;
-        // this._table.setCell(i,j,cell);
-        // console.log(cell)
+    if (this._table._selector.currentRange){
+      const focusRange = this._table._selector.currentRange;
+      const startCol = focusRange.startCol;
+      const endCol = focusRange.endCol;
+      const startRow = focusRange.startRow;
+      const endRow = focusRange.endRow;
+      // 这边是批量更改，而且要考虑到startCol会比endCol小
+      // 先把所有单元格都找出来吧
+      let row = [];
+      let col = [];
+      if (startCol>endCol){
+        col[0] = endCol;
+        col[1] = startCol;
       }
+      else {
+        col[0] = startCol;
+        col[1] = endCol;
+      }
+      if (startRow>endRow){
+        row[0] = endRow;
+        row[1] = startRow;
+      }
+      else {
+        row[0] = startRow;
+        row[1] = endRow;
+      }
+      for (let i = row[0]; i <= row[1]; i++){
+        for (let j = col[0]; j <= col[1]; j++){
+          let cell = this._table.getCell(i,j);
+          let styleIndex = this._table.addStyle(this.style);
+          // 因为这里改的是对象里面的变量，所以不需要额外再设置了，直接渲染就有效果
+          cell[2].style = styleIndex;
+          // this._table.setCell(i,j,cell);
+          // console.log(cell)
+        }
+      }
+      // 这里要处理比较特殊的merge和表格边框
+      this._table.render();
     }
-    // 这里要处理比较特殊的merge和表格边框
+  }
+
+  // 下面这个函数是用来设置单元格的边框的
+  addBorderToCell(){
+
     this._table.render();
+  }
+
+  // 下面这个函数是用来设置单元格合并的
+  mergeCell(){
+    if (this._table._selector.currentRange){
+      const focusRange = this._table._selector.currentRange;
+      const startCol = focusRange.startCol;
+      const endCol = focusRange.endCol;
+      const startRow = focusRange.startRow;
+      const endRow = focusRange.endRow;
+      console.log(focusRange);
+      console.log(xy2expr(startCol,startRow))
+      let mergeRangeExpression = `${xy2expr(startCol,startRow)}:${xy2expr(endCol,endRow)}`
+      console.log(this._table.isMerged(mergeRangeExpression));
+      if (this._table.isMerged(mergeRangeExpression)){
+        this._table.unmerge(mergeRangeExpression);
+      }
+      else {
+        this._table.merge(mergeRangeExpression);
+      }
+      this._table.render();
+    }
   }
 
   static create(elementString, table) {

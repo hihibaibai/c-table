@@ -270,12 +270,14 @@ export default class TableRenderer {
     }
     // get methods ---- start ------
     rowHeightAt(index) {
+        // 查看是否有特殊的设置行的属性
         const { _row } = this;
         if (_row) {
             const r = _row(index);
             if (r)
                 return r.hide === true ? 0 : r.height;
         }
+        // 如果没有，返回默认的
         return this._rowHeight;
     }
     colWidthAt(index) {

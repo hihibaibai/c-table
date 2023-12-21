@@ -218,7 +218,7 @@ export function render(renderer) {
     renderArea('body', canvas, area2, renderer);
     renderArea('col-header', canvas, headerArea21, renderer);
     renderArea('row-header', canvas, headerArea23, renderer);
-    // render freeze
+    // render freeze 上面这些渲染的有重复就是为了实现冻结功能
     const [row, col] = _freeze;
     if (col > 0 || row > 0) {
       renderLines(canvas, renderer._freezeGridline, () => {

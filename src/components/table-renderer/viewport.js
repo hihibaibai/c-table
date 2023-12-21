@@ -7,7 +7,7 @@ export default class Viewport {
         const { _startRow, _startCol, _rows, _cols, _width, _height } = render;
         const getRowHeight = (index) => render.rowHeightAt(index);
         const getColWidth = (index) => render.colWidthAt(index);
-        // area2
+        // area2 左上角那部分，第二象限
         const area2 = Area.create(_startRow, _startCol, frow - 1, fcol - 1, tx, ty, 0, 0, getRowHeight, getColWidth);
         const [startRow4, startCol4] = [
             frow + render._scrollRows,
@@ -27,7 +27,7 @@ export default class Viewport {
             x += getColWidth(endCol);
             endCol += 1;
         }
-        // area4
+        // area4 这里是实际放数据的地方 第四象限
         const x4 = tx + area2.width;
         const y4 = ty + area2.height;
         let w4 = _width - x4;
@@ -39,9 +39,9 @@ export default class Viewport {
         endCol -= 1;
         endRow -= 1;
         const area4 = Area.create(startRow4, startCol4, endRow, endCol, x4, y4, w4, h4, getRowHeight, getColWidth);
-        // area1
+        // area1 这个是x轴上面的部分，第一象限
         const area1 = Area.create(_startRow, startCol4, frow - 1, endCol, x4, ty, w4, 0, getRowHeight, getColWidth);
-        // area3
+        // area3 这个是y轴的部分，第三象限
         const area3 = Area.create(startRow4, _startCol, endRow, fcol - 1, tx, y4, 0, h4, getRowHeight, getColWidth);
         this.areas = [area1, area2, area3, area4];
         // header areas

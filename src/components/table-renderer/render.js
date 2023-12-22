@@ -138,6 +138,8 @@ function renderArea(type, canvas, area, renderer) {
       if (c1 && c1.style !== undefined)
         Object.assign(cstyle, styles[c1.style]);
     }
+    console.log(cell)
+    // console.log( cell[2].style !== undefined)
     if (cell instanceof Object && cell[2].style !== undefined) {
       Object.assign(cstyle, styles[cell[2].style]);
     }

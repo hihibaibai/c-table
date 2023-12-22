@@ -1,7 +1,7 @@
 import {borderWidth} from './config';
 import {Range} from '../table-renderer';
 import {rangeUnoinMerges, stepColIndex, stepRowIndex} from './data';
-import Selector from './selector';
+import Selector from './selector/selector';
 import scrollbar from './index.scrollbar';
 import {bindMousemoveAndMouseup} from './event';
 
@@ -228,8 +228,8 @@ function reset(t) {
   if (toolbarStyle) {
     const rowIndex = _selector._focus[0];
     const colIndex = _selector._focus[1];
-    console.log(rowIndex, colIndex)
-    console.log(t.style(t.getCell(rowIndex, colIndex)[2].style))
+    // console.log(rowIndex, colIndex)
+    // console.log(t.style(t.getCell(rowIndex, colIndex)[2].style))
     toolbarStyle.setStyle(t.style(t.getCell(rowIndex, colIndex)[2].style));
   }
 }

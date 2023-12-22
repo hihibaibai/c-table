@@ -71,7 +71,7 @@ export default class Selector {
         this._editable = editable;
     }
     get currentRange() {
-      console.log(this._ranges);
+      // console.log(this._ranges);
         return this._ranges.at(-1);
     }
     placement(value) {

@@ -23,7 +23,7 @@ export default class Bgcolor {
       this.inactiveElementCss();
     })
     this.change = (colorString) => {
-      console.log(colorString);
+      // console.log(colorString);
       this.el._.getElementsByTagName('rect')[0].setAttribute('fill', colorString);
       toolbar.style.bgcolor = colorString;
     };
@@ -58,7 +58,7 @@ export default class Bgcolor {
 
   // 这个函数是用来更新绑定的值与对应的状态的。
   updateValue(style){
-    console.log(style)
+    // console.log(style)
     let colorString = '#FFF'
     if (style.bgcolor){
       colorString = style.bgcolor;

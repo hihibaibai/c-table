@@ -60,7 +60,7 @@ export default class Cells {
     if (oldData == null) {
       if (cell !== null && cell !== undefined) {
         const index = this.cellData.push([row, col, cell]) - 1;
-        console.log(index)
+        console.log(cell)
         this.updateIndex(row, col, index);
         this.addFormula(cell, index);
       }
@@ -69,6 +69,7 @@ export default class Cells {
       const old = oldData[2];
       const ovalStr = cellValueString(old);
       const nvalStr = cellValueString(cell);
+      console.log(cell);
       console.log('newText', nvalStr);
       if (nvalStr === '') {
         // delete

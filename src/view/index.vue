@@ -35,7 +35,7 @@ export default {
 			// debugger;
 			// this.xs.setCell(0,0,{value:'11111',border:0,style:0}).render();
 			// this.xs.data(this.xs.data())
-			console.log(this.xs.data());
+			// console.log(this.xs.data());
 			// console.log(this.toolbar.getCurrentStyle());
 			// this.init();
 		},

@@ -26,7 +26,7 @@ export default class ColorPlatte {
 			'width': 'fit-content'
 		});
 		this.table = h('table', '').css({'z-index': 'auto'});
-		console.log(this.table)
+		// console.log(this.table)
 		// 这里两个for循环拼装table
 		let tbody = document.createElement('tbody');
 		for (let i = 0; i < colorGrid.length; i++) {

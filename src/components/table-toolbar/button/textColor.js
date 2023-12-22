@@ -18,7 +18,7 @@ export default class TextColor {
 		this.colorPlatte = new colorPlatte(this);
 		this.colorPlatte.el.css({display:'none'});
 		this.el._.append(this.colorPlatte.el._);
-		console.log(this.el._)
+		// console.log(this.el._)
 		this.el._.setAttribute('tabindex','-1')
 		this.el.on('blur',(evt)=>{
 			this.inactiveElementCss();
@@ -58,7 +58,7 @@ export default class TextColor {
 
 	// 这个函数是用来更新绑定的值与对应的状态的。
 	updateValue(style){
-		console.log(style)
+		// console.log(style)
 		let colorString = '#FFF'
 		if (style.color){
 			colorString = style.color;

@@ -45,7 +45,7 @@ export default class toolbar {
     }
     // 先把外框画出来
     let width = table._width;
-    console.log(width())
+    // console.log(width())
     this.container = h(container, `${stylePrefix}-toolbar`).css({
       width: width(),
       // color:'#f6f6f6',
@@ -113,7 +113,6 @@ export default class toolbar {
         this.buttons.get(stringName).updateValue(style);
       }
     }
-    console.log(style);
   }
 
   // 下面这个函数是用来监听内部的按钮是不是被按的，这样的话就能够根据选择的单元格更改他的格式了
@@ -147,10 +146,11 @@ export default class toolbar {
       for (let i = row[0]; i <= row[1]; i++){
         for (let j = col[0]; j <= col[1]; j++){
           let cell = this._table.getCell(i,j);
+          console.log(cell);
           let styleIndex = this._table.addStyle(this.style);
-          // 因为这里改的是对象里面的变量，所以不需要额外再设置了，直接渲染就有效果
           cell[2].style = styleIndex;
-          // this._table.setCell(i,j,cell);
+          // debugger
+          this._table.setCell(i,j,cell);
           // console.log(cell)
         }
       }

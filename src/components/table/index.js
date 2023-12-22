@@ -327,7 +327,6 @@ export default class Table {
         })
         .formatter(this._cells._formatter)
         .render();
-    console.log('renderer',_renderer);
 
     // viewport
     const {viewport} = _renderer;

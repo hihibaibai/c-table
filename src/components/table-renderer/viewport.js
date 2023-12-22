@@ -13,14 +13,14 @@ export default class Viewport {
             frow + render._scrollRows,
             fcol + render._scrollCols,
         ];
-        // endRow
-        let y = area2.height + ty;
+        // endRow 这个endRow最后会变成能放的最大数量， 根据上面给出的开始单元格索引和单元格总长算出一行可以放多少个单元格
+        let y = area2.height + ty
         let endRow = startRow4;
         while (y < _height && endRow < _rows) {
             y += getRowHeight(endRow);
             endRow += 1;
         }
-        // endCol
+        // endCol 同上
         let x = area2.width + tx;
         let endCol = startCol4;
         while (x < _width && endCol < _cols) {
@@ -28,8 +28,8 @@ export default class Viewport {
             endCol += 1;
         }
         // area4 这里是实际放数据的地方 第四象限
-        const x4 = tx + area2.width;
-        const y4 = ty + area2.height;
+        const x4 = tx + area2.width; // 这个是第四象限左上角那个坐标点的x轴
+        const y4 = ty + area2.height; // 这个是第四象限左上角那个坐标点的y轴
         let w4 = _width - x4;
         let h4 = _height - y4;
         if (endCol === _cols)

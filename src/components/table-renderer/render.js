@@ -2,13 +2,13 @@ import Canvas from './canvas';
 import { cellRender, cellBorderRender } from './cell-render';
 import { eachRanges } from './range';
 import { borderRanges } from './border';
-function renderLines(canvas, { width, color }, cb) {
+function renderLines(canvas, { width, color }, callbackFn) {
   if (width > 0) {
     canvas
       .save()
       .beginPath()
       .prop({ lineWidth: width - 0.5, strokeStyle: color });
-    cb();
+    callbackFn();
     canvas.restore();
   }
 }

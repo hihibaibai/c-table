@@ -145,31 +145,32 @@ export default class Range {
                 (other.endRow + 1 === this.startRow ||
                     this.endRow + 1 === this.startCol)));
     }
-    eachRow(cb, max) {
-        let { endRow } = this;
-        if (max && endRow > max)
+    eachRow(callbackFn, max) {
+        let endRow = this.endRow;
+        if (max && endRow > max){
             endRow = max;
+        }
         for (let row = this.startRow; row <= endRow; row += 1) {
-            cb(row);
+            callbackFn(row);
         }
         return this;
     }
-    eachCol(cb, max) {
+    eachCol(callbackFn, max) {
         let { endCol } = this;
         if (max && endCol > max)
             endCol = max;
         for (let col = this.startCol; col <= endCol; col += 1) {
-            cb(col);
+            callbackFn(col);
         }
         return this;
     }
     /**
-     * @param {Function} cb (rowIndex, colIndex) => {}
+     * @param {Function} callbackFn (rowIndex, colIndex) => {}
      * @returns this
      */
-    each(cb) {
+    each(callbackFn) {
         this.eachRow((row) => {
-            this.eachCol((col) => cb(row, col));
+            this.eachCol((col) => callbackFn(row, col));
         });
         return this;
     }
@@ -214,10 +215,10 @@ export default class Range {
         return this.create(row, col, row1, col1);
     }
 }
-export function eachRanges(refs, cb) {
+export function eachRanges(refs, callbackFn) {
     if (refs && refs.length > 0) {
         refs.forEach((ref) => {
-            cb(Range.with(ref));// 这里的Range.with()函数会返回一个Range对象 也就是本文件的default class
+            callbackFn(Range.with(ref));// 这里的Range.with()函数会返回一个Range对象 也就是本文件的default class
         });
     }
 }

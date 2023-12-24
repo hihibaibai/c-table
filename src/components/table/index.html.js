@@ -285,24 +285,24 @@ export function fromHtml(t, html, [toStartRow, toStartCol]) {
     }
     return toEnd;
 }
-function elementAttrValue(el, attrName, cb) {
+function elementAttrValue(el, attrName, callbackFn) {
     if (el.hasAttribute(attrName)) {
         const value = el.getAttribute(attrName);
         if (value != null)
-            cb(value);
+            callbackFn(value);
     }
 }
-function elementStylePropValue(el, propName, defaultValue, cb) {
+function elementStylePropValue(el, propName, defaultValue, callbackFn) {
     const value = el.style.getPropertyValue(propName);
     const flag = value !== null && value !== '' && value !== defaultValue;
     if (flag)
-        cb(value);
+        callbackFn(value);
     return flag;
 }
-function elementStyleBooleanValue(el, propName, targetValue, cb) {
+function elementStyleBooleanValue(el, propName, targetValue, callbackFn) {
     const value = el.style.getPropertyValue(propName);
     if (value === targetValue)
-        cb(value);
+        callbackFn(value);
 }
 function style2css(s) {
     let cssStr = '';

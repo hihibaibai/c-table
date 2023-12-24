@@ -239,12 +239,12 @@ function toArraysFromClipboardText(text) {
         arrays.push([text]);
     return arrays;
 }
-function getClipboardText(item, type, cb = (text) => { }) {
+function getClipboardText(item, type, callbackFn = (text) => { }) {
     if (item.types.includes(type)) {
         item.getType(type).then((blob) => {
             blob.text().then((text) => {
                 // console.log(`[${type}]: ${text}`);
-                cb(text);
+                callbackFn(text);
             });
         });
         return true;

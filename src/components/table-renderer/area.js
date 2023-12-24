@@ -48,24 +48,24 @@ export default class Area {
     contains(x, y) {
         return this.containsx(x) && this.containsy(y);
     }
-    eachRow(cb) {
+    eachRow(callbackFn) {
         this.range.eachRow((index) => {
             const { y, height } = this.rowMap.get(index) || { y: 0, height: 0 };
             if (height > 0)
-                cb(index, y, height);
+                callbackFn(index, y, height);
         });
     }
-    eachCol(cb) {
+    eachCol(callbackFn) {
         this.range.eachCol((index) => {
             const { x, width } = this.colMap.get(index) || { x: 0, width: 0 };
             if (width > 0)
-                cb(index, x, width);
+                callbackFn(index, x, width);
         });
     }
-    each(cb) {
+    each(callbackFn) {
         this.eachRow((row, y, height) => {
             this.eachCol((col, x, width) => {
-                cb(row, col, { x, y, width, height });
+                callbackFn(row, col, { x, y, width, height });
             });
         });
     }

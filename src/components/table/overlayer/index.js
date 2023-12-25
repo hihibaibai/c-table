@@ -15,10 +15,10 @@ export default class Overlayer {
         ];
         target.append(...this._areas, ...this._headerAreas);
     }
-    area(index, rect) {
-        if (rect) {
-            this._areaRects[index] = rect;
-            const { x, y, height, width } = rect;
+    area(index, areaInstance) {
+        if (areaInstance) {
+            this._areaRects[index] = areaInstance;
+            const { x, y, height, width } = areaInstance;
             this._areas[index].css({ left: x, top: y, width, height });
             return this;
         }

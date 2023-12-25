@@ -97,14 +97,24 @@ function renderArea(type, canvas, area, renderer) {
   let col;
   const { _rowHeader, _colHeader } = renderer;
   if (type === 'row-header') {
-    if (_rowHeader.width <= 0)
+    if (_rowHeader.width <= 0){
       return;
-    ({ cell, merges, cellRenderer } = _rowHeader);
+    }
+    else {
+      cell = _rowHeader.cell;
+      merges = _rowHeader.merges;
+      cellRenderer = _rowHeader.cellRenderer;
+    }
   }
   else if (type === 'col-header') {
-    if (_colHeader.height <= 0)
+    if (_colHeader.height <= 0){
       return;
-    ({ cell, merges, cellRenderer } = _colHeader);
+    }
+    else {
+      cell = _colHeader.cell;
+      merges = _colHeader.merges;
+      cellRenderer = _colHeader.cellRenderer;
+    }
   }
   else {
     // console.log(renderer)
@@ -170,14 +180,14 @@ function renderArea(type, canvas, area, renderer) {
     });
   }
   const _render = (cell, rect, cstyle) => { // 这个函数好像是专门为merge的单元格服务的
-    if (type === 'body') {
-      renderCellGridline(canvas, gridline, rect);
+    // if (type === 'body') {
+    //   renderCellGridline(canvas, gridline, rect);
+    //   cellRender(canvas, cell, rect, cstyle, [], cellRenderer, formatter);
+    // }
+    // else {
       cellRender(canvas, cell, rect, cstyle, [], cellRenderer, formatter);
-    }
-    else {
-      cellRender(canvas, cell, rect, cstyle, [], cellRenderer, formatter);
       renderCellGridline(canvas, gridline, rect);
-    }
+    // }
   };
   // render cells
   area.each((r, c, rect) => {
@@ -190,10 +200,16 @@ function renderArea(type, canvas, area, renderer) {
       }
       else {
         cellRender(canvas, cellv, rect, mergeCellStyle(r, c, cellv), mergeCellBorder(r,c,cellv), cellRenderer, formatter);
-        renderCellGridline(canvas, gridline, rect);
+      renderCellGridline(canvas, gridline, rect);
+
       }
     }
   });
+  // area.each((r, c, rect) => {// 这里特意再循环一次，这样的话那个单元格的线就准了
+  //   if (!cellMerges.has(`${r}_${c}`)) {
+  //     renderCellGridline(canvas, gridline, rect);
+  //   }
+  // });
   // render merges
   // console.log(areaMergeRenderParams);
   areaMergeRenderParams.forEach((it) => _render(...it));

@@ -78,56 +78,76 @@ function fontString(family, size, italic, bold) {
   return undefined;
 }
 
-export function cellBorderRender(canvas, rect, borderLine, autoAlign = false) {
-  let top, right, bottom, left;
-  if (Array.isArray(borderLine)) {
-    top = right = bottom = left = borderLine;
-  }
-  else {
-    ({top, right, bottom, left} = borderLine);
-  }
-  canvas.save().beginPath().translate(rect.x, rect.y);
-  const lineRects = (index, offset) => {
-    const array = [
-      [0 - offset, 0, rect.width + offset, 0],
-      [rect.width, 0, rect.width, rect.height],
-      [0 - offset, rect.height, rect.width + offset, rect.height],
-      [0, 0, 0, rect.height],
-    ];
-    return array[index];
-  };
-  [top, right, bottom, left].forEach((it, index) => {
-    if (it) {
+export function cellBorderRender(canvas, rect, border) {
+  // border 现在在这里直接渲染了.
+  if (Object.keys(border).length > 0) {
+    canvas.save().beginPath().translate(rect.x, rect.y);
+    const borderTypes = Object.keys(border);
+    borderTypes.forEach((type) => {
+      const borderLineStyle = border[type][0];
+      const borderColor = border[type][1];
+      let x1;
+      let y1;
+      let x2;
+      let y2;
+      switch (type){
+        case 'top':
+          x1=0;
+          y1=0;
+          x2=rect.width;
+          y2=0;
+          break;
+        case 'right':
+          x1=rect.width;
+          y1=0;
+          x2=rect.width;
+          y2=rect.height;
+          break;
+        case 'bottom':
+          x1=0;
+          y1=rect.height;
+          x2=rect.width;
+          y1=rect.height;
+          break;
+        case 'left':
+          x1=0;
+          y1=0;
+          x2=0;
+          y2=rect.height;
+          break;
+        default:
+          break;
+      }
       let lineDash = [];
       let lineWidth = 1;
-      if (it[0] === 'thick') {
-        lineWidth = 3;
-      }
-      else if (it[0] === 'medium') {
-        lineWidth = 2;
-      }
-      else if (it[0] === 'dotted') {
-        lineDash = [1, 1];
-      }
-      else if (it[0] === 'dashed') {
-        lineDash = [2, 2];
-      }
-      let offset = 0;
-      if (autoAlign) {
-        offset = lineWidth / 2;
+      switch (borderLineStyle){
+        case 'thick':
+          lineWidth = 3;
+          break;
+        case 'medium':
+          lineWidth = 2;
+          break;
+        case 'dotted':
+          lineDash = [1, 1];
+          break;
+        case 'dashed':
+          lineDash = [2, 2];
+          break;
+        default:
+          break;
       }
       canvas
-          .prop({strokeStyle: it[1], lineWidth})
+          .prop({strokeStyle: borderColor,lineWidth: lineWidth})
           .setLineDash(lineDash)
-          .line(...lineRects(index, offset));
-    }
-  });
-  canvas.restore();
+          .line(x1,y1,x2,y2);
+    });
+    canvas.restore();
+  }
 }
 
 // canvas: Canvas2d
 // style:
-export function cellRender(canvas, cell, rect, style, border, cellRenderer, formatter) {
+export function cellRender(canvas, cell, rect, style, cellRenderer, formatter) {
   // console.log(canvas, cell, rect, style, cellRenderer, formatter)
   let text = '';
   if (cell) {
@@ -228,72 +248,7 @@ export function cellRender(canvas, cell, rect, style, border, cellRenderer, form
     canvas.restore();
   }
 
-  // border 之前是单独渲染border的,现在在这里直接渲染了.
-  if (Object.keys(border).length > 0) {
-    canvas
-        .save()
-        .beginPath();
-    const borderTypes = Object.keys(border);
-    borderTypes.forEach((type) => {
-      const borderLineStyle = border[type][0];
-      const borderColor = border[type][1];
-      let x1;
-      let y1;
-      let x2;
-      let y2;
-      switch (type){
-        case 'top':
-          x1=0;
-          y1=0;
-          x2=rect.width;
-          y2=0;
-          break;
-        case 'right':
-          x1=rect.width;
-          y1=0;
-          x2=rect.width;
-          y2=rect.height;
-          break;
-        case 'bottom':
-          x1=0;
-          y1=rect.height;
-          x2=rect.width;
-          y1=rect.height;
-          break;
-        case 'left':
-          x1=0;
-          y1=0;
-          x2=0;
-          y2=rect.height;
-          break;
-        default:
-          break;
-      }
-      let lineDash = [];
-      let lineWidth = 1;
-      switch (borderLineStyle){
-        case 'thick':
-          lineWidth = 3;
-          break;
-        case 'medium':
-          lineWidth = 2;
-          break;
-        case 'dotted':
-          lineDash = [1, 1];
-          break;
-        case 'dashed':
-          lineDash = [2, 2];
-          break;
-        default:
-          break;
-      }
-      canvas
-          .prop({strokeStyle: borderColor,lineWidth: lineWidth})
-          .setLineDash(lineDash)
-          .line(x1,y1,x2,y2);
-    });
-    canvas.restore();
-  }
+
   canvas.restore();
 }
 

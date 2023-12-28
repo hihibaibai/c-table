@@ -20,7 +20,7 @@ function renderCellGridline(canvas, gridline, { x, y, width, height }) {
       .line(0, height, width, height);
   });
 }
-function renderBorder(canvas, area, range, borderRect, type, lineStyle, color, autoAlign) {
+/*function renderBorder(canvas, area, range, borderRect, type, lineStyle, color, autoAlign) {
   const borderLineStyle = [lineStyle, color];
   // if type === 'none', you can delete borders in ref(range)
   if (type === 'outside' || type === 'all') {
@@ -81,7 +81,7 @@ function renderBorders(canvas, area, borders, areaMerges) {
       });
     });
   }
-}
+}*/
 function renderArea(type, canvas, area, renderer) {
   if (!area)
     return;
@@ -148,14 +148,14 @@ function renderArea(type, canvas, area, renderer) {
       if (c1 && c1.style !== undefined)
         Object.assign(cstyle, styles[c1.style]);
     }
-    console.log(cell)
+    // console.log(cell)
     // console.log( cell[2].style !== undefined)
     if (cell instanceof Object && cell[2].style !== undefined) {
       Object.assign(cstyle, styles[cell[2].style]);
     }
     return cstyle;
   };
-  const mergeCellBorder = (r, c, cellv) => {
+  const mergeCellBorder = (cellv) => {
     let border = [];
     if (cellv instanceof Object && cellv[2].border !== undefined) {
       Object.assign(border, borders[cellv[2].border]);
@@ -185,7 +185,7 @@ function renderArea(type, canvas, area, renderer) {
     //   cellRender(canvas, cell, rect, cstyle, [], cellRenderer, formatter);
     // }
     // else {
-      cellRender(canvas, cell, rect, cstyle, [], cellRenderer, formatter);
+      cellRender(canvas, cell, rect, cstyle, cellRenderer, formatter);
       renderCellGridline(canvas, gridline, rect);
     // }
   };
@@ -196,25 +196,43 @@ function renderArea(type, canvas, area, renderer) {
       // _render(cellv, rect, mergeCellStyle(r, c, cellv));
       if (type === 'body') {
         renderCellGridline(canvas, gridline, rect);
-        cellRender(canvas, cellv, rect, mergeCellStyle(r, c, cellv), mergeCellBorder(r,c,cellv), cellRenderer, formatter);
+        cellRender(canvas, cellv, rect, mergeCellStyle(r, c, cellv), cellRenderer, formatter);
       }
       else {
-        cellRender(canvas, cellv, rect, mergeCellStyle(r, c, cellv), mergeCellBorder(r,c,cellv), cellRenderer, formatter);
+        cellRender(canvas, cellv, rect, mergeCellStyle(r, c, cellv), cellRenderer, formatter);
       renderCellGridline(canvas, gridline, rect);
 
       }
     }
   });
-  // area.each((r, c, rect) => {// 这里特意再循环一次，这样的话那个单元格的线就准了
-  //   if (!cellMerges.has(`${r}_${c}`)) {
-  //     renderCellGridline(canvas, gridline, rect);
-  //   }
-  // });
+  area.each((r, c, rect) => {// 这里特意再循环一次，这样的话那个单元格的线就准了
+    if (!cellMerges.has(`${r}_${c}`)) {
+      renderCellGridline(canvas, gridline, rect);
+    }
+  });
   // render merges
   // console.log(areaMergeRenderParams);
-  areaMergeRenderParams.forEach((it) => _render(...it));
+  areaMergeRenderParams.forEach((item) => {
+    let cellv = item[0];
+    let rect = item[1];
+    let cellStyle = item[2];
+    cellRender(canvas, cellv, rect, cellStyle, cellRenderer, formatter);
+    renderCellGridline(canvas, gridline, rect);
+  });
   // render borders
-  // renderBorders(canvas, area, borders, areaMerges);
+  area.each((r, c, rect) => {
+    if (type === 'body'){
+      if (!cellMerges.has(`${r}_${c}`)) { //这里要跳过合并的单元格，合并的单元格要单独渲染边框
+        const cellv = cell(r, c);
+        cellBorderRender(canvas,rect,mergeCellBorder(cellv));
+      }
+    }
+  });
+  areaMergeRenderParams.forEach((item) => {
+    let cellv = item[0];
+    let rect = item[1];
+    cellBorderRender(canvas,rect,mergeCellBorder(cellv));
+  });
   canvas.restore();
 }
 export function render(renderer) {

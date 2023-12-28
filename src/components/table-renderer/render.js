@@ -5,9 +5,9 @@ import { borderRanges } from './border';
 function renderLines(canvas, { width, color }, callbackFn) {
   if (width > 0) {
     canvas
-      .save()
-      .beginPath()
-      .prop({ lineWidth: width - 0.5, strokeStyle: color });
+        .save()
+        .beginPath()
+        .prop({ lineWidth: width - 0.5, strokeStyle: color });
     callbackFn();
     canvas.restore();
   }
@@ -15,9 +15,9 @@ function renderLines(canvas, { width, color }, callbackFn) {
 function renderCellGridline(canvas, gridline, { x, y, width, height }) {
   renderLines(canvas, gridline, () => {
     canvas
-      .translate(x, y)
-      .line(width, 0, width, height)
-      .line(0, height, width, height);
+        .translate(x, y)
+        .line(width, 0, width, height)
+        .line(0, height, width, height);
   });
 }
 /*function renderBorder(canvas, area, range, borderRect, type, lineStyle, color, autoAlign) {
@@ -130,12 +130,12 @@ function renderArea(type, canvas, area, renderer) {
     col = renderer._col;
   }
   canvas
-    .save()
-    .translate(area.x, area.y)
-    .prop('fillStyle', style.bgcolor? style.bgcolor: renderer._bgcolor)
-    .rect(0, 0, area.width, area.height)
-    .fill()
-    .clip();
+      .save()
+      .translate(area.x, area.y)
+      .prop('fillStyle', style.bgcolor? style.bgcolor: renderer._bgcolor)
+      .rect(0, 0, area.width, area.height)
+      .fill()
+      .clip();
   const mergeCellStyle = (r, c, cell) => {
     const cstyle = Object.assign({}, style);
     if (row) {
@@ -185,8 +185,8 @@ function renderArea(type, canvas, area, renderer) {
     //   cellRender(canvas, cell, rect, cstyle, [], cellRenderer, formatter);
     // }
     // else {
-      cellRender(canvas, cell, rect, cstyle, cellRenderer, formatter);
-      renderCellGridline(canvas, gridline, rect);
+    cellRender(canvas, cell, rect, cstyle, cellRenderer, formatter);
+    renderCellGridline(canvas, gridline, rect);
     // }
   };
   // render cells
@@ -200,7 +200,7 @@ function renderArea(type, canvas, area, renderer) {
       }
       else {
         cellRender(canvas, cellv, rect, mergeCellStyle(r, c, cellv), cellRenderer, formatter);
-      renderCellGridline(canvas, gridline, rect);
+        renderCellGridline(canvas, gridline, rect);
 
       }
     }
@@ -272,11 +272,11 @@ export function render(renderer) {
       const { bgcolor } = renderer._headerStyle;
       if (bgcolor)
         canvas
-          .save()
-          .prop({ fillStyle: bgcolor })
-          .rect(0, 0, width, height)
-          .fill()
-          .restore();
+            .save()
+            .prop({ fillStyle: bgcolor })
+            .rect(0, 0, width, height)
+            .fill()
+            .restore();
       renderLines(canvas, renderer._headerGridline, () => {
         canvas.line(0, height, width, height).line(width, 0, width, height);
       });

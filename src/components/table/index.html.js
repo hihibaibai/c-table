@@ -14,6 +14,7 @@ export function toHtml(t, from) {
         .filter((it) => it.intersects(fromRange));
     // borders
     // const borders = t._data.borders.filter((it) => Range.with(it[0]).intersects(fromRange));
+    // todo 因为改了border的逻辑，所以这边的边框生成逻辑要重写
     const border2css = (lineStyle, color) => {
         if (lineStyle === 'dashed' || lineStyle === 'dotted') {
             return `1px ${lineStyle} ${color}`;

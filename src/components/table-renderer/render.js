@@ -20,68 +20,7 @@ function renderCellGridline(canvas, gridline, { x, y, width, height }) {
         .line(0, height, width, height);
   });
 }
-/*function renderBorder(canvas, area, range, borderRect, type, lineStyle, color, autoAlign) {
-  const borderLineStyle = [lineStyle, color];
-  // if type === 'none', you can delete borders in ref(range)
-  if (type === 'outside' || type === 'all') {
-    cellBorderRender(canvas, borderRect, borderLineStyle, true);
-  }
-  else if (type === 'left') {
-    cellBorderRender(canvas, borderRect, { left: borderLineStyle }, autoAlign);
-  }
-  else if (type === 'top') {
-    cellBorderRender(canvas, borderRect, { top: borderLineStyle }, autoAlign);
-  }
-  else if (type === 'right') {
-    cellBorderRender(canvas, borderRect, { right: borderLineStyle }, autoAlign);
-  }
-  else if (type === 'bottom') {
-    cellBorderRender(canvas, borderRect, { bottom: borderLineStyle }, autoAlign);
-  }
-  if (type === 'all' ||
-    type === 'inside' ||
-    type === 'horizontal' ||
-    type === 'vertical') {
-    if (type !== 'horizontal') {
-      range.eachCol((index) => {
-        if (index < range.endCol) {
-          const r1 = range.clone();
-          r1.endCol = r1.startCol = index;
-          if (r1.intersects(area.range)) {
-            cellBorderRender(canvas, area.rect(r1), { right: borderLineStyle }, autoAlign);
-          }
-        }
-      });
-    }
-    if (type !== 'vertical') {
-      range.eachRow((index) => {
-        if (index < range.endRow) {
-          const r1 = range.clone();
-          r1.endRow = r1.startRow = index;
-          if (r1.intersects(area.range)) {
-            cellBorderRender(canvas, area.rect(r1), { bottom: borderLineStyle }, autoAlign);
-          }
-        }
-      });
-    }
-  }
-}
-function renderBorders(canvas, area, borders, areaMerges) {
-  // render borders
-  if (borders && borders.length > 0) {
-    console.log(borders)
-    borders.forEach((border) => {
-      const [, , borderStyle, lineColor] = border;
-      let borderNeedsRender = borderRanges(area, border, areaMerges);
-      borderNeedsRender.forEach((borderEntry) => {
-        const range = borderEntry[0];
-        const rect = borderEntry[1];
-        const type = borderEntry[2];
-        renderBorder(canvas, area, range, rect, type, borderStyle, lineColor);
-      });
-    });
-  }
-}*/
+
 function renderArea(type, canvas, area, renderer) {
   if (!area)
     return;
@@ -179,16 +118,6 @@ function renderArea(type, canvas, area, renderer) {
       }
     });
   }
-  const _render = (cell, rect, cstyle) => { // 这个函数好像是专门为merge的单元格服务的
-    // if (type === 'body') {
-    //   renderCellGridline(canvas, gridline, rect);
-    //   cellRender(canvas, cell, rect, cstyle, [], cellRenderer, formatter);
-    // }
-    // else {
-    cellRender(canvas, cell, rect, cstyle, cellRenderer, formatter);
-    renderCellGridline(canvas, gridline, rect);
-    // }
-  };
   // render cells
   area.each((r, c, rect) => {
     if (!cellMerges.has(`${r}_${c}`)) { // 之前记录过所有的合并的单元格，这里跳过需要合并渲染的单元格
@@ -205,7 +134,8 @@ function renderArea(type, canvas, area, renderer) {
       }
     }
   });
-  area.each((r, c, rect) => {// 这里特意再循环一次，这样的话那个单元格的线就准了
+  // render cell border line
+  area.each((r, c, rect) => {
     if (!cellMerges.has(`${r}_${c}`)) {
       renderCellGridline(canvas, gridline, rect);
     }
@@ -219,7 +149,7 @@ function renderArea(type, canvas, area, renderer) {
     cellRender(canvas, cellv, rect, cellStyle, cellRenderer, formatter);
     renderCellGridline(canvas, gridline, rect);
   });
-  // render borders
+  // render cell's defined borders
   area.each((r, c, rect) => {
     if (type === 'body'){
       if (!cellMerges.has(`${r}_${c}`)) { //这里要跳过合并的单元格，合并的单元格要单独渲染边框
@@ -228,11 +158,14 @@ function renderArea(type, canvas, area, renderer) {
       }
     }
   });
+  // render merges border
   areaMergeRenderParams.forEach((item) => {
     let cellv = item[0];
     let rect = item[1];
     cellBorderRender(canvas,rect,mergeCellBorder(cellv));
   });
+  // render printPreviewLine
+
   canvas.restore();
 }
 export function render(renderer) {

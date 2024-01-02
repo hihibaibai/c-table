@@ -14,6 +14,7 @@ import table from '@/components/table/index'
 import toolbar from "@/components/table-toolbar/toolbar";
 // import table from '@wolf-table/table'
 // import spreadSheet from 'x-data-spreadsheet'
+import ezPrint from "@/components/ezPrint/ezPrint";
 export default {
 	name: "index",
 	mounted() {
@@ -27,17 +28,21 @@ export default {
 	},
 	methods: {
 		foobar() {
+			let printer = {};
 			console.log(this.xs);
 			// this.xs.addBorder('A2:A3', 'left', 'medium', '#21ba45').render();
-			this.xs.addStyle({bold:true});
-			this.xs.addBorder({left: ['medium', '#21ba45'], top:['medium', '#21ba45'], right:['medium', '#21ba45']})
+			// this.xs.addStyle({bold:true});
+			// this.xs.addBorder({left: ['medium', '#21ba45'], top:['medium', '#21ba45'], right:['medium', '#21ba45']})
+			// this.xs.setCell(1,2,{value:'11111',border:0,style:0}).render();
 
 			// debugger;
-			this.xs.setCell(1,2,{value:'11111',border:0,style:0}).render();
 			// this.xs.data(this.xs.data())
 			// console.log(this.xs.data());
 			// console.log(this.toolbar.getCurrentStyle());
 			// this.init();
+			printer = new ezPrint();
+			setTimeout(()=>{printer.setPrintContent();printer.print();},1000);
+			// printer.setPrintContent();
 		},
 		render() {
 			this.xs.render();

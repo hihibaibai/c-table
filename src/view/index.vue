@@ -41,7 +41,8 @@ export default {
 			// console.log(this.toolbar.getCurrentStyle());
 			// this.init();
 			printer = new ezPrint();
-			setTimeout(()=>{printer.setPrintContent();printer.print();},1000);
+			setTimeout(()=>{printer.setPrintContent();},1000);
+			// setTimeout(()=>{printer.setPrintContent();printer.print();},1000);
 			// printer.setPrintContent();
 		},
 		render() {

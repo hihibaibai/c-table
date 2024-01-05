@@ -214,5 +214,60 @@ export function render(renderer) {
         canvas.line(0, height, width, height).line(width, 0, width, height);
       });
     }
+
+    // render printPreviewLine
+    renderPrintPreview(canvas,area4,renderer);
+
   }
+}
+function renderPrintPreview(canvas,area,renderer){
+  // 准备画布，只在第四象限画。
+  canvas
+      .save()
+      .translate(area.x, area.y)
+
+  // need to konw where to draw the line in A4
+  const printPreviewWidth = 794;
+  const printPreviewHeight = 1122;
+
+  let xOffset = area.xOffset%printPreviewWidth;
+  let printPreviewXToLeft = printPreviewWidth-xOffset;
+  let xPreviewLinePosition = [];
+  if (printPreviewXToLeft>0){//if smaller than 0, there will be no previewLine
+    xPreviewLinePosition.push(printPreviewXToLeft);
+    let xLoopSize = Math.floor((area.width - printPreviewXToLeft)/printPreviewWidth);
+    for (let i = 0; i < xLoopSize; i++){
+      xPreviewLinePosition.push(printPreviewXToLeft+printPreviewWidth);
+    }
+  }
+
+  xPreviewLinePosition.forEach((xPosition)=>{
+    canvas
+        .beginPath()
+        .prop({ lineWidth: 0.5, strokeStyle: 'green' })
+        .setLineDash([5,3])
+        .line(xPosition,0,xPosition,area.height)
+        .closePath()
+  });
+
+  let yOffset = area.yOffset%printPreviewHeight;
+  let printPreviewYToTop = printPreviewHeight-yOffset;
+  let yPreviewLinePosition = [];
+  if (printPreviewYToTop>0){//if smaller than 0, there will be no previewLine
+    yPreviewLinePosition.push(printPreviewYToTop);
+    let xLoopSize = Math.floor((area.width - printPreviewYToTop)/printPreviewHeight);
+    for (let i = 0; i < xLoopSize; i++){
+      yPreviewLinePosition.push(printPreviewYToTop+printPreviewHeight);
+    }
+  }
+
+  yPreviewLinePosition.forEach((yPosition)=>{
+    canvas
+        .beginPath()
+        .prop({ lineWidth: 0.5, strokeStyle: 'green' })
+        .setLineDash([5,3])
+        .line(0,yPosition,area.width,yPosition)
+        .closePath()
+  });
+  canvas.restore();
 }

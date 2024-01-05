@@ -8,6 +8,8 @@ export default class Area {
         this.height = height;
         this.rowHeight = rowHeight;
         this.colWidth = colWidth;
+        this.xOffset = 0;
+        this.yOffset = 0;
         // { rowIndex: { y, height }}
         this.rowMap = new Map();
         // { colIndex: { x, width }}
@@ -30,6 +32,17 @@ export default class Area {
         });
         if (this.width <= 0)
             this.width = totalWidth;
+        // only need offset value for area 4
+        if (range.end[0]>0&&range.end[1]>0){
+            for (let i = 0; i < range.start[0]; i++){
+                const cellHeight = rowHeight(i);
+                this.yOffset = this.yOffset + cellHeight;
+            }
+            for (let i = 0; i < range.start[1]; i++){
+                const cellWidth = colWidth(i);
+                this.xOffset = this.xOffset + cellWidth;
+            }
+        }
     }
     /**
      * check whether or not x contained in area

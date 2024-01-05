@@ -1,5 +1,3 @@
-import {col} from "@/components/table/data";
-
 export default class ezPrint{
   constructor() {
     this.iframe = {};

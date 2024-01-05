@@ -178,8 +178,9 @@ export function cellRender(canvas, cell, rect, style, cellRenderer, formatter) {
   canvas.save().beginPath().translate(rect.x, rect.y);
   // clip
   canvas.rect(0, 0, rect.width, rect.height).clip();
-  if (bgcolor)
+  if (bgcolor){
     canvas.prop('fillStyle', bgcolor).fill();
+  }
   // rotate
   if (rotate && rotate > 0) {
     canvas.rotate(rotate * (Math.PI / 180));
@@ -248,7 +249,7 @@ export function cellRender(canvas, cell, rect, style, cellRenderer, formatter) {
     canvas.restore();
   }
 
-
+  canvas.closePath();
   canvas.restore();
 }
 

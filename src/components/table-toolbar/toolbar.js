@@ -115,6 +115,13 @@ export default class toolbar {
     }
   }
 
+  //todo: merge的点击后提示要做成excel一样的，但是selector的刷新事件还没有，需要再看一下。
+  setIsMerge(selector){
+    if (selector.currentRange){
+      let mergeRangeExpression = `${xy2expr(selector.currentRange.startCol,selector.currentRange.startRow)}:${xy2expr(selector.currentRange.endCol,selector.currentRange.endRow)}`
+    }
+  }
+
   // 下面这个函数是用来监听内部的按钮是不是被按的，这样的话就能够根据选择的单元格更改他的格式了
   styleChanged() {
     if (this._table._selector.currentRange){
@@ -161,7 +168,6 @@ export default class toolbar {
 
   // 下面这个函数是用来设置单元格的边框的
   addBorderToCell(){
-
     this._table.render();
   }
 

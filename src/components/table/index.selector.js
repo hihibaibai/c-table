@@ -228,9 +228,8 @@ function reset(t) {
   if (toolbarStyle) {
     const rowIndex = _selector._focus[0];
     const colIndex = _selector._focus[1];
-    // console.log(rowIndex, colIndex)
-    // console.log(t.style(t.getCell(rowIndex, colIndex)[2].style))
     toolbarStyle.setStyle(t.style(t.getCell(rowIndex, colIndex)[2].style));
+    // toolbarStyle.setIsMerge(_selector);
   }
 }
 

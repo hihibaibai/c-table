@@ -205,7 +205,12 @@ export default class toolbar {
           bottom:["thin","#000"]
         }
         borderIndex = this.table.addBorder(border);
-
+        cell2DArray.forEach(row => {
+          row.forEach(cell =>{
+            cell[2].border = borderIndex;
+            this.table.setCell(cell[0],cell[1],cell[2])
+          })
+        })
         break;
       case 'inside':
         break;
@@ -220,7 +225,7 @@ export default class toolbar {
         break;
     }
 
-    // this.table.render();
+    this.table.render();
   }
 
   // 下面这个函数是用来设置单元格合并的

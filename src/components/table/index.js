@@ -38,6 +38,7 @@ import TextEditor from './editor/text';
 
 export default class Table {
   constructor(element, width, height, options) {
+    console.log(this)
     // renderer options
     this._rendererOptions = {};
     this._copyable = false;
@@ -69,7 +70,7 @@ export default class Table {
       height: height(),
       width: width(),
     });
-    console.log("this._container", this._container)
+    // console.log("this._container", this._container)
     this._data = defaultData();
     // update default data
     if (options) {
@@ -98,11 +99,11 @@ export default class Table {
     const canvasElement = document.createElement('canvas');
     // tabIndex for trigger keydown event
     this._canvas = h(canvasElement).attr('tabIndex', '1');
-    console.log("this._canvas", this._canvas)
+    // console.log("this._canvas", this._canvas)
     this._container.append(canvasElement);
     this._renderer = new TableRenderer(canvasElement, width(), height());
     this._overlayer = new Overlayer(this._container);
-    console.log("this._overlayer", this._overlayer)
+    // console.log("this._overlayer", this._overlayer)
     // resize rect of content
     resizeContentRect(this);
     if (options === null || options === void 0 ? void 0 : options.selectable) {
@@ -268,20 +269,18 @@ export default class Table {
   }
 
   addBorder(value) {
-    console.log('addBorder',value);
-    addBorder(this._data, value);
-    return this;
+    return addBorder(this._data, value);
   }
 
-  clearBorder(value) {
-    clearBorder(this._data, value);
-    return this;
-  }
+  // clearBorder(value) {
+  //   clearBorder(this._data, value);
+  //   return this;
+  // }
 
-  clearBorders() {
-    clearBorders(this._data);
-    return this;
-  }
+  // clearBorders() {
+  //   clearBorders(this._data);
+  //   return this;
+  // }
 
   setCell(row, col, value) {
     const {_cells,_data} = this;

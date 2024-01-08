@@ -9,6 +9,7 @@ import TextColor from "../table-toolbar/button/textColor";
 import Bgcolor from "../table-toolbar/button/bgcolor";
 import Textwrap from "../table-toolbar/button/textwrap";
 import Merge from "../table-toolbar/button/merge";
+import Border from "../table-toolbar/button/border"
 
 export default class toolbar {
   constructor(elementString, table) {
@@ -34,10 +35,10 @@ export default class toolbar {
     // 第二个变量有10个可选值
     //'outside','all','left','top','right','bottom','inside','horizontal','vertical','none'
     this.merge = true;
-    this._table = table
+    this.table = table
 
     this.container = null;
-    // 接着画界面,
+    // 接着画界面
     const container = typeof elementString === 'string' ? document.querySelector(elementString) : elementString;
     if (container === null) {
       console.info('未获取到元素')
@@ -97,6 +98,12 @@ export default class toolbar {
     let merge = new Merge(this);
     this.container.append(merge.el);
     this.buttons.set("merge",merge);
+
+    // 边框
+    let border = new Border(this);
+    this.container.append(border.el);
+    this.buttons.set("border",border);
+
     // 在table组件内注入格式，这样在输入字符的时候就有格式可用了。
     table.toolbarStyle = this;
   };
@@ -124,8 +131,8 @@ export default class toolbar {
 
   // 下面这个函数是用来监听内部的按钮是不是被按的，这样的话就能够根据选择的单元格更改他的格式了
   styleChanged() {
-    if (this._table._selector.currentRange){
-      const focusRange = this._table._selector.currentRange;
+    if (this.table._selector.currentRange){
+      const focusRange = this.table._selector.currentRange;
       const startCol = focusRange.startCol;
       const endCol = focusRange.endCol;
       const startRow = focusRange.startRow;
@@ -152,29 +159,74 @@ export default class toolbar {
       }
       for (let i = row[0]; i <= row[1]; i++){
         for (let j = col[0]; j <= col[1]; j++){
-          let cell = this._table.getCell(i,j);
+          let cell = this.table.getCell(i,j);
           console.log(cell);
-          let styleIndex = this._table.addStyle(this.style);
+          let styleIndex = this.table.addStyle(this.style);
           cell[2].style = styleIndex;
           // debugger
-          this._table.setCell(i,j,cell);
+          this.table.setCell(i,j,cell);
           // console.log(cell)
         }
       }
       // 这里要处理比较特殊的merge和表格边框
-      this._table.render();
+      this.table.render();
     }
   }
 
-  // 下面这个函数是用来设置单元格的边框的
-  addBorderToCell(){
-    this._table.render();
+  // border:{//这个是单元格边框的格式
+    // top:["thin","#000"],//第一个字符串表示线的粗细 可选为thin medium thick dashed dotted。第二个字符串表示线的颜色，使用16进制颜色表示
+    // left:["thin","#000"],//同上
+    // right:["thin","#000"],//同上
+    // bottom:["thin","#000"]//同上
+  // },
+  addBorderToCell(type){
+    console.log(this.table._selector.currentRange)
+    console.log(type);
+    let cell2DArray = [];
+    if (this.table._selector.currentRange){
+      this.table._selector.currentRange.eachRow((rowIndex)=>{
+        let colCellArray = [];
+        this.table._selector.currentRange.eachCol((colIndex)=>{
+          colCellArray.push(this.table.getCell(rowIndex,colIndex));
+        });
+        cell2DArray.push(colCellArray);
+      })
+    }
+    console.log(cell2DArray);
+    // todo: 根据这个二维数组先做一个全部加边框的功能，再写加内部边框的功能，这样基本上所有的加边框的功能都能实现了。
+    let border = {};
+    let borderIndex = null;
+    switch (type){
+      case 'all':
+        border = {
+          top:["thin","#000"],
+          left:["thin","#000"],
+          right:["thin","#000"],
+          bottom:["thin","#000"]
+        }
+        borderIndex = this.table.addBorder(border);
+
+        break;
+      case 'inside':
+        break;
+      case 'horizontal':
+        break;
+      case 'vertical':
+        break;
+      case 'outside':
+        break;
+
+      default:
+        break;
+    }
+
+    // this.table.render();
   }
 
   // 下面这个函数是用来设置单元格合并的
   mergeCell(){
-    if (this._table._selector.currentRange){
-      const focusRange = this._table._selector.currentRange;
+    if (this.table._selector.currentRange){
+      const focusRange = this.table._selector.currentRange;
       const startCol = focusRange.startCol;
       const endCol = focusRange.endCol;
       const startRow = focusRange.startRow;
@@ -182,14 +234,14 @@ export default class toolbar {
       console.log(focusRange);
       console.log(xy2expr(startCol,startRow))
       let mergeRangeExpression = `${xy2expr(startCol,startRow)}:${xy2expr(endCol,endRow)}`
-      console.log(this._table.isMerged(mergeRangeExpression));
-      if (this._table.isMerged(mergeRangeExpression)){
-        this._table.unmerge(mergeRangeExpression);
+      console.log(this.table.isMerged(mergeRangeExpression));
+      if (this.table.isMerged(mergeRangeExpression)){
+        this.table.unmerge(mergeRangeExpression);
       }
       else {
-        this._table.merge(mergeRangeExpression);
+        this.table.merge(mergeRangeExpression);
       }
-      this._table.render();
+      this.table.render();
     }
   }
 

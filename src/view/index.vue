@@ -5,11 +5,11 @@
 			<button @click="print">print</button>
 			<button @click="render">render</button>
 		</div>
-		<div>
-			<canvas id="canvas" width="100px" height="100px"></canvas>
-		</div>
-<!--		<div id="toolbar"></div>-->
-<!--		<div id="tablePlace"></div>-->
+<!--		<div>-->
+<!--			<canvas id="canvas" width="100px" height="100px"></canvas>-->
+<!--		</div>-->
+		<div id="toolbar"></div>
+		<div id="tablePlace"></div>
 	</div>
 </template>
 
@@ -24,7 +24,7 @@ import ezPrint from "@/components/ezPrint/ezPrint";
 export default {
 	name: "index",
 	mounted() {
-		// this.init();
+		this.init();
 	},
 	data() {
 		return {
@@ -52,12 +52,6 @@ export default {
 			// setTimeout(()=>{printer.setPrintContent(imageForTest);printer.print()},500);
 			// this.printer=printer;
 			// printer.setPrintContent();
-
-			let canvas = document.getElementById('canvas');
-			let ctx = canvas.getContext('2d')
-			console.log(canvas.getAttribute('width'));
-			console.log(canvas.getAttribute('height'));
-			ctx.fillRect(10,10,50,50);
 
 		},
 		print(){

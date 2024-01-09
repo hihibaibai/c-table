@@ -107,7 +107,7 @@ export function cellBorderRender(canvas, rect, border) {
           x1=0;
           y1=rect.height;
           x2=rect.width;
-          y1=rect.height;
+          y2=rect.height;
           break;
         case 'left':
           x1=0;

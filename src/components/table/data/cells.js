@@ -56,11 +56,11 @@ export default class Cells {
 
   set(row, col, cell) {
     let oldData = this.get(row, col);
-    console.log(oldData)
+    console.log("oldData",oldData)
     if (oldData == null) {
       if (cell !== null && cell !== undefined) {
         const index = this.cellData.push([row, col, cell]) - 1;
-        console.log(cell)
+        console.log("newData",cell)
         this.updateIndex(row, col, index);
         this.addFormula(cell, index);
       }

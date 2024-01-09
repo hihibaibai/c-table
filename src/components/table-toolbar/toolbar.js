@@ -193,7 +193,6 @@ export default class toolbar {
       })
     }
     console.log(cell2DArray);
-    // todo: 根据这个二维数组先做一个全部加边框的功能，再写加内部边框的功能，这样基本上所有的加边框的功能都能实现了。
     let border = {};
     let borderIndex = null;
     switch (type){
@@ -209,18 +208,190 @@ export default class toolbar {
           row.forEach(cell =>{
             cell[2].border = borderIndex;
             this.table.setCell(cell[0],cell[1],cell[2])
-          })
-        })
+          });
+        });
         break;
       case 'inside':
+        for (let i = 0; i < cell2DArray.length; i++) {
+          border = {};
+          if (!!cell2DArray[i]){
+            if (!!cell2DArray[i+1]){
+              border.bottom=["thin","#000"];
+            }
+            for (let j = 0; j < cell2DArray[i].length; j++) {
+              border = Object.assign({},border);
+              delete border.right;
+              if (!!cell2DArray[i][j]){
+                let cell = cell2DArray[i][j];
+                if (!!cell2DArray[i][j+1]){
+                  border.right=["thin","#000"];
+                }
+                borderIndex = this.table.addBorder(border);
+                cell[2].border = borderIndex;
+                this.table.setCell(cell[0],cell[1],cell[2]);
+              }
+            }
+          }
+        }
         break;
       case 'horizontal':
+        for (let i = 0; i < cell2DArray.length; i++) {
+          border = {};
+          if (!!cell2DArray[i]) {
+            if (!!cell2DArray[i + 1]) {
+              border.bottom = ["thin", "#000"];
+            }
+          }
+          for (let j = 0; j < cell2DArray[i].length; j++) {
+            if (!!cell2DArray[i][j]){
+              let cell = cell2DArray[i][j];
+              borderIndex = this.table.addBorder(border);
+              cell[2].border = borderIndex;
+              this.table.setCell(cell[0],cell[1],cell[2]);
+            }
+          }
+        }
         break;
       case 'vertical':
+        for (let i = 0; i < cell2DArray.length; i++) {
+          for (let j = 0; j < cell2DArray[i].length; j++) {
+            if (!!cell2DArray[i][j]){
+              if (!!cell2DArray[i][j]){
+                border = {};
+                let cell = cell2DArray[i][j];
+                if (!!cell2DArray[i][j+1]){
+                  border.right=["thin","#000"];
+                }
+                borderIndex = this.table.addBorder(border);
+                cell[2].border = borderIndex;
+                this.table.setCell(cell[0],cell[1],cell[2]);
+              }
+            }
+          }
+        }
         break;
       case 'outside':
+        for (let i = 0; i < cell2DArray.length; i++) {
+          border = {};
+          if (!!cell2DArray[i]){
+            if (!cell2DArray[i-1]){
+              border.top=["thin","#000"];
+            }
+            if (!cell2DArray[i+1]){
+              border.bottom=["thin","#000"];
+            }
+            for (let j = 0; j < cell2DArray[i].length; j++) {
+              border = Object.assign({},border);
+              delete border.left;
+              delete border.right;
+              if (!!cell2DArray[i][j]){
+                let cell = cell2DArray[i][j];
+                if (!cell2DArray[i][j-1]){
+                  border.left=["thin","#000"];
+                }
+                if (!cell2DArray[i][j+1]){
+                  border.right=["thin","#000"];
+                }
+                borderIndex = this.table.addBorder(border);
+                cell[2].border = borderIndex;
+                this.table.setCell(cell[0],cell[1],cell[2]);
+              }
+            }
+          }
+        }
         break;
-
+      case 'left':
+        for (let i = 0; i < cell2DArray.length; i++) {
+          border = {};
+          if (!!cell2DArray[i]){
+            for (let j = 0; j < cell2DArray[i].length; j++) {
+              border = Object.assign({},border);
+              delete border.left;
+              delete border.right;
+              if (!!cell2DArray[i][j]){
+                let cell = cell2DArray[i][j];
+                if (!cell2DArray[i][j-1]){
+                  border.left=["thin","#000"];
+                }
+                borderIndex = this.table.addBorder(border);
+                cell[2].border = borderIndex;
+                this.table.setCell(cell[0],cell[1],cell[2]);
+              }
+            }
+          }
+        }
+        break;
+      case 'top':
+        for (let i = 0; i < cell2DArray.length; i++) {
+          border = {};
+          if (!!cell2DArray[i]){
+            if (!cell2DArray[i-1]){
+              border.top=["thin","#000"];
+            }
+            for (let j = 0; j < cell2DArray[i].length; j++) {
+              border = Object.assign({},border);
+              delete border.left;
+              delete border.right;
+              if (!!cell2DArray[i][j]){
+                let cell = cell2DArray[i][j];
+                borderIndex = this.table.addBorder(border);
+                cell[2].border = borderIndex;
+                this.table.setCell(cell[0],cell[1],cell[2]);
+              }
+            }
+          }
+        }
+        break;
+      case 'right':
+        for (let i = 0; i < cell2DArray.length; i++) {
+          border = {};
+          if (!!cell2DArray[i]){
+            for (let j = 0; j < cell2DArray[i].length; j++) {
+              border = Object.assign({},border);
+              delete border.left;
+              delete border.right;
+              if (!!cell2DArray[i][j]){
+                let cell = cell2DArray[i][j];
+                if (!cell2DArray[i][j+1]){
+                  border.right=["thin","#000"];
+                }
+                borderIndex = this.table.addBorder(border);
+                cell[2].border = borderIndex;
+                this.table.setCell(cell[0],cell[1],cell[2]);
+              }
+            }
+          }
+        }
+        break;
+      case 'bottom':
+        for (let i = 0; i < cell2DArray.length; i++) {
+          border = {};
+          if (!!cell2DArray[i]){
+            if (!cell2DArray[i+1]){
+              border.bottom=["thin","#000"];
+            }
+            for (let j = 0; j < cell2DArray[i].length; j++) {
+              border = Object.assign({},border);
+              delete border.left;
+              delete border.right;
+              if (!!cell2DArray[i][j]){
+                let cell = cell2DArray[i][j];
+                borderIndex = this.table.addBorder(border);
+                cell[2].border = borderIndex;
+                this.table.setCell(cell[0],cell[1],cell[2]);
+              }
+            }
+          }
+        }
+        break;
+      case 'none':
+        cell2DArray.forEach(row => {
+          row.forEach(cell =>{
+            delete cell[2].border;
+            this.table.setCell(cell[0],cell[1],cell[2])
+          });
+        });
+        break;
       default:
         break;
     }

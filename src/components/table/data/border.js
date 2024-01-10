@@ -15,6 +15,22 @@ export function addBorder(tableData, value) {
   return tableData.borders.push(value) - 1;
 }
 
+export function getBorder(tableData, index) {
+  const border = tableData.borders[index];
+  return Object.assign({}, border);
+}
+
+export function getBorderIndex(tableData, value) {
+  if (value) {
+    for (let i = 0; i < tableData.borders.length; i += 1) {
+      const it = tableData.borders[i];
+      if (equals(it, value)) {
+        return i;
+      }
+    }
+  }
+}
+
 // export function addBorder(t, value) {
 //     if (!t.borders)
 //         t.borders = [];

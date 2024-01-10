@@ -23,12 +23,12 @@ export function getStyle(tableData, index, withDefault = true) {
 export function getStyleIndex(tableData,value){
   const styleKeys = Object.keys(value);
   const defaultStyle = tableData.style;
-  console.log(defaultStyle);
+  // console.log(defaultStyle);
   let result = true;
   for (let i = 0; i < styleKeys.length; i++) {
-    console.log(styleKeys[i])
-    console.log(value[styleKeys[i]])
-    console.log(defaultStyle[styleKeys[i]])
+    // console.log(styleKeys[i])
+    // console.log(value[styleKeys[i]])
+    // console.log(defaultStyle[styleKeys[i]])
     if (value[styleKeys[i]] != defaultStyle[styleKeys[i]]){
       result = false;
     }

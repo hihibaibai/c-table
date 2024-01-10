@@ -164,6 +164,7 @@ export default class ezPrint{
   }
 
   print(){
+    console.log(1)
     if (this.readyForPrint){
       this.iframe.contentWindow.print();
     }

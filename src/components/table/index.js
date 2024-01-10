@@ -19,7 +19,6 @@ import {
   cellValue,
   Cells,
   clearStyles,
-  addBorder,
   // clearBorder,
   // clearBorders,
   cellValueString,
@@ -27,12 +26,14 @@ import {
   isLastCol,
   copy,
 } from './data';
+import {print} from './print';
 import resizer from './index.resizer';
 import scrollbar from './index.scrollbar';
 import selector from './index.selector';
 import {initEvents} from './index.event';
 import {fromHtml, toHtml} from './index.html';
 import {addStyle, getStyle,getStyleIndex} from './data/style';
+import {addBorder,getBorder,getBorderIndex} from './data/border'
 import {EventEmitter} from './event';
 import TextEditor from './editor/text';
 
@@ -272,6 +273,14 @@ export default class Table {
     return addBorder(this._data, value);
   }
 
+  border(index) {
+    return getBorder(this._data,index);
+  }
+
+  getBorderIndex(value) {
+    return getBorderIndex(this._data, value);
+  }
+
   // clearBorder(value) {
   //   clearBorder(this._data, value);
   //   return this;
@@ -430,6 +439,18 @@ export default class Table {
       arrays.push(a);
     });
     return arrays;
+  }
+
+  printContent(){
+    return print(this);
+  }
+
+  getCellByXYPosition(offsetX,offsetY){
+    const {viewport} = this._renderer;
+    if (viewport) {
+      let cell = viewport.cellAt(offsetX,offsetY);
+      return cell;
+    }
   }
 
   onClick(handler) {

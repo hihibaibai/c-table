@@ -161,10 +161,10 @@ export default class toolbar {
         for (let j = col[0]; j <= col[1]; j++){
           let cell = this.table.getCell(i,j);
           console.log(cell);
-          let styleIndex = this.table.addStyle(this.style);
-          cell[2].style = styleIndex;
-          // debugger
-          this.table.setCell(i,j,cell);
+          let styleIndex = this.table.addStyle(Object.assign({},this.style));
+          let cellValue = Object.assign({},cell[2]);// 这里一定要新建对象，不然会导致更新出问题。
+          cellValue.style = styleIndex;
+          this.table.setCell(i,j,cellValue);
           // console.log(cell)
         }
       }

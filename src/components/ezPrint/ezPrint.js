@@ -7,6 +7,7 @@ export default class ezPrint{
     this.loadImage = [];
     this.readyForPrint = false;
     this.iframe = document.createElement('iframe');
+    this.margin = 20;
     let iframe = this.iframe;
     // iframe.setAttribute('style','position:absolute;width:0;height:0;left:-5000px;top:-5000px')
     iframe.setAttribute('style','position:absolute;width:794px;height:1123px')
@@ -36,12 +37,14 @@ export default class ezPrint{
         style.innerText=
             'body {' +
             ` width:${pageWidthInPx}px;`+
-            ` height:${pageHeightInPx-1}px;`+
+            ` height:${pageHeightInPx}px;`+
+            ` padding:${this.margin}px;`+
             ' margin: 0;' +
             '}' +
             'table {' +
-            ` width:${pageWidthInPx}px;`+
-            ` height:${pageHeightInPx-1}px;`+
+            // ` width:${pageWidthInPx-this.margin*2}px;`+
+            // ` height:${pageHeightInPx-this.margin*2-1}px;`+
+            ` border-spacing: 0;`+
             // ' background-color: black;'+
             '}' +
             'table.content-container {' +
@@ -58,7 +61,7 @@ export default class ezPrint{
             '}' +
             '@page {' +
             ' size:A4;' +
-            ' margin:0' +
+            ' margin:0;'+
             '}'
         headTag.appendChild(style);
       }
@@ -88,10 +91,11 @@ export default class ezPrint{
           'table {' +
           ` width:${pageWidthInPx}px;`+
           ` height:${pageHeightInPx-1}px;`+
+          ` border-spacing: 0;`+
           // ' background-color: black;'+
           '}' +
           'table.content-container {' +
-          '    page-break-after:always;' +
+          ' page-break-after:always;' +
           '}' +
           'thead.content-header {' +
           '    display:table-header-group;' +
@@ -161,6 +165,8 @@ export default class ezPrint{
     tableTag.appendChild(tbodyTag);
 
     this.body.appendChild(tableTag)
+    console.log(this.iframeDocument.body.clientWidth)
+    console.log(this.iframeDocument.body.clientHeight)
   }
 
   print(){

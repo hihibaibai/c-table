@@ -60,7 +60,6 @@ export default {
 			let image = this.xs.printContent();
 			setTimeout(()=>{printer.setPrintContent(image);},500);
 			setTimeout(()=>{printer.print();},1500);
-			printer.print();
 
 		},
 		render() {

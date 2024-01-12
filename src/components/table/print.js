@@ -1,8 +1,8 @@
 import Canvas from "../table-renderer/canvas";
 
 const a4Size = {
-  width: 794,
-  height: 1122,
+  width: 794-40,
+  height: 1122-40,
 }
 
 import {cellBorderRender, cellRender} from '../table-renderer/cell-render'

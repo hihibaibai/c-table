@@ -7,7 +7,7 @@ const a4Size = {
 
 import {cellBorderRender, cellRender} from '../table-renderer/cell-render'
 import canvas from '../table-renderer/canvas'
-// todo: 这个是给打印模块用的
+// 这个是给打印模块用的
 export function print(table){
   // 先根据数据量，确定总宽度和高度，用来制作一个巨大的canvas
   // 先通过数据获取最大的行和列索引
@@ -44,12 +44,18 @@ export function print(table){
   if (maxHeight < a4Size.height) {
     maxHeight = a4Size.height;
   }
+  // 顺便获取一共需要几页纸
+  let horizontalPages = Math.ceil(maxWidth/a4Size.width);
+  let verticalPages = Math.ceil(maxHeight/a4Size.height);
 
+  console.log(maxWidth);
+  console.log(maxHeight);
   let canvasElement = document.createElement('canvas');
   // let canvasElement = document.getElementById('canvas');
   canvasElement.setAttribute('width',maxWidth.toString());
   canvasElement.setAttribute('height',maxHeight.toString());
   let canvas = new Canvas(canvasElement,1);
+  canvas.size(maxWidth.toString(), maxHeight.toString());
   let canvasContext = canvasElement.getContext('2d');
   canvasContext.save();
   // canvasContext.fillStyle = 'black';
@@ -95,8 +101,25 @@ export function print(table){
     xOffset = 0;
   }
 
-  console.log(canvasElement.toDataURL());
-  return canvasElement.toDataURL();
+
+  // todo: 下面的这个for循环还有问题，之后再修，现在只能先把一张大图片传出来。
+  let result = [];
+  for (let i = 1; i <= horizontalPages; i++) {
+    for (let j = 1; j <= verticalPages; j++) {
+      let sizedCanvasElement = document.createElement('canvas');
+      sizedCanvasElement.width=a4Size.width;
+      sizedCanvasElement.height=a4Size.height;
+      let sizedCanvasContext = sizedCanvasElement.getContext('2d');
+      sizedCanvasContext.drawImage(canvasElement,a4Size.width*i,a4Size.height*j,a4Size.width,a4Size.height,0,0,a4Size.width,a4Size.height);
+      result.push(sizedCanvasElement.toDataURL());
+      console.log(sizedCanvasElement.toDataURL());
+    }
+  }
+
+
+  // console.log(canvasElement.toDataURL());
+  // return result;
+  return canvasElement.toDataURL()
   // 再历遍所有的单元格，跳过merge的单元格，这个时候就直接把格式，边框，和单元格内容渲染出来
   // 再渲染merge的单元格
 

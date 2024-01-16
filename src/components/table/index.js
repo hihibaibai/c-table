@@ -64,6 +64,7 @@ export default class Table {
     this._width = width;
     this._height = height;
     this.toolbarStyle = null;
+    this.printSetting = {};
     const container = typeof element === 'string' ? document.querySelector(element) : element;
     if (container === null)
       throw new Error('未获取到元素');
@@ -121,6 +122,11 @@ export default class Table {
       this._editable = true;
     }
     this._copyable = (options === null || options === void 0 ? void 0 : options.copyable) || false;
+
+    // set printSetting
+    if (options.printSetting){
+      this.printSetting = Object.assign({},options.printSetting);
+    }
     // set editors
     this._editors.set('text', new TextEditor());
     initEvents(this);
@@ -407,7 +413,7 @@ export default class Table {
         const row = data[i];
         endCol = startCol + row.length - 1;
         for (let j = 0; j < row.length; j += 1) {
-          this.cell(startRow + i, startCol + j, row[j]);
+          this.setCell(startRow + i, startCol + j, row[j]);
         }
       }
       endRow = startRow + data.length - 1;

@@ -165,7 +165,6 @@ function renderArea(type, canvas, area, renderer) {
     cellBorderRender(canvas,rect,mergeCellBorder(cellv));
   });
   // render printPreviewLine
-
   canvas.restore();
 }
 export function render(renderer) {
@@ -227,8 +226,9 @@ function renderPrintPreview(canvas,area,renderer){
       .translate(area.x, area.y)
 
   // need to konw where to draw the line in A4
-  const printPreviewWidth = 794;
-  const printPreviewHeight = 1122;
+  let margin = 20;
+  const printPreviewWidth = 794-(margin*2);
+  const printPreviewHeight = 1122-(margin*2);
 
   let xOffset = area.xOffset%printPreviewWidth;
   let printPreviewXToLeft = printPreviewWidth-xOffset;

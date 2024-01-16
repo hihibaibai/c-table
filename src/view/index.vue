@@ -36,7 +36,7 @@ export default {
 			const data = JSON.parse('{"rows":{"len":100},"cols":{"len":26},"rowHeight":25,"colWidth":100,"scroll":[0,0,0,0],"style":{"bgcolor":"#FFF","color":"#333","align":"left","valign":"middle","textwrap":false,"bold":false,"italic":false,"fontFamily":"Roboto","fontSize":10,"underline":false,"strikethrough":false,"border":{}},"styles":[{"bgcolor":"#000100","color":"#333","align":"left","valign":"middle","textwrap":false,"bold":false,"italic":false,"fontFamily":"Roboto","fontSize":10,"underline":false,"strikethrough":false,"border":{}}],"borders":[{"top":["thin","#000"],"left":["thin","#000"],"right":["thin","#000"],"bottom":["thin","#000"]}],"merges":[],"cells":[[0,1,{"value":"#{SP_Q_KCPDB.商品编号}"}],[2,0,{"value":"","border":0}],[2,1,{"value":"","border":0}],[2,2,{"border":0,"style":0}],[3,0,{"value":"","border":0}],[3,1,{"value":"","border":0}],[3,2,{"border":0,"style":0}],[4,0,{"value":"","border":0}],[4,1,{"value":"","border":0}],[4,2,{"value":"","border":0}],[1,2,[1,2,{"value":"","style":0}]]]}')
 			let printer = {};
 			console.log(this.xs);
-			// console.log(this.xs.data());
+			console.log(JSON.stringify(this.xs.data()));
 			this.xs.data(data);
 			// this.xs.addBorder('A2:A3', 'left', 'medium', '#21ba45').render();
 			// this.xs.addStyle({bold:true});
@@ -56,7 +56,7 @@ export default {
 
 		},
 		print(){
-			let printer = new ezPrint();
+			let printer = new ezPrint({margin:20});
 			let image = this.xs.printContent();
 			setTimeout(()=>{printer.setPrintContent(image);},500);
 			setTimeout(()=>{printer.print();},1500);

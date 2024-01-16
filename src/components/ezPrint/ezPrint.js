@@ -1,13 +1,18 @@
 export default class ezPrint{
-  constructor() {
+  constructor(options) {
     this.iframe = {};
     this.iframeDocument = {};
     this.body = {};
-    this.loadNumber = 0;
-    this.loadImage = [];
+    this.loadNumber = 0; // 确认图片是否加载完成的数字
+    this.loadImage = []; // 所有的图片的
     this.readyForPrint = false;
     this.iframe = document.createElement('iframe');
-    this.margin = 20;
+    if (options){
+      this.margin = options.margin?options.margin:20;
+    }
+    else {
+      this.margin = 0;
+    }
     let iframe = this.iframe;
     // iframe.setAttribute('style','position:absolute;width:0;height:0;left:-5000px;top:-5000px')
     iframe.setAttribute('style','position:absolute;width:794px;height:1123px')
@@ -16,7 +21,6 @@ export default class ezPrint{
 
     if (navigator.userAgent.includes("Firefox")){
       this.iframe.contentWindow.onload = () =>{
-        // iframe.onload = ()=>{
         this.iframeDocument = iframe.contentDocument;
         this.iframeDocument.firstChild.width;
         console.log(this.iframeDocument);
@@ -36,8 +40,8 @@ export default class ezPrint{
         let style = document.createElement('style');
         style.innerText=
             'body {' +
-            ` width:${pageWidthInPx}px;`+
-            ` height:${pageHeightInPx}px;`+
+            ` width:${pageWidthInPx-this.margin*2}px;`+
+            ` height:${pageHeightInPx-this.margin*2-1}px;`+
             ` padding:${this.margin}px;`+
             ' margin: 0;' +
             '}' +
@@ -66,7 +70,7 @@ export default class ezPrint{
         headTag.appendChild(style);
       }
     }
-    else {
+    /*else {
       this.iframeDocument = iframe.contentDocument;
       this.iframeDocument.firstChild.width;
       console.log(this.iframeDocument);
@@ -84,8 +88,8 @@ export default class ezPrint{
       let style = this.iframeDocument.createElement('style');
       style.innerText=
           'body {' +
-          ` width:${pageWidthInPx}px;`+
-          ` height:${pageHeightInPx-1}px;`+
+          ` width:${pageWidthInPx-40}px;`+
+          ` height:${pageHeightInPx-40-1}px;`+
           ' margin: 0;' +
           '}' +
           'table {' +
@@ -111,11 +115,11 @@ export default class ezPrint{
           ' margin:0' +
           '}'
       headTag.appendChild(style);
-    }
+    }*/
 
     this.iframe.contentWindow.onafterprint = (event) =>{
-      console.log(event)
-      document.getElementsByTagName('body')[0].removeChild(this.iframe);
+      // console.log(event)
+      // document.getElementsByTagName('body')[0].removeChild(this.iframe);
     }
     return this;
   }
@@ -137,20 +141,49 @@ export default class ezPrint{
     let headContent = this.iframeDocument.createElement('div');
     // headContent.innerText = '这个是表头的内容';
     let bodyContent = this.iframeDocument.createElement('div');
+    if (content instanceof Array){
+      if (content.length>0){
+        console.log(content);
+        if (typeof content[0] === 'string'){
+          // for (let i = 0; i < content.length; i++) {
+          //   let imageUrl = content[i];
+          // }
+          // for (const imageUrl of content) {
+          // }
+          for (const imageUrl of content) {
+            let imageObj = new Image();
+            imageObj.src=imageUrl;
+            console.log(imageUrl)
+            this.loadImage.push(imageUrl);
+            imageObj.onload = () =>{
+              this.loadCompleteCallback();
+            }
+            imageObj.width=794-this.margin;
+            imageObj.height=1122-this.margin;
+            bodyContent.appendChild(imageObj);
+          }
+        }
+      }
+    }
     if (content instanceof Image){
       this.loadImage.push(content.src);
       content.onload = ()=>{
         this.loadCompleteCallback();
       }
+      content.width=794-this.margin;
+      content.height=1122-this.margin;
       bodyContent.appendChild(content);
     }
     if ( typeof content === "string"){
       let imageObj = new Image();
+      console.log(content)
       imageObj.src=content;
       this.loadImage.push(content);
       imageObj.onload = () =>{
         this.loadCompleteCallback();
       }
+      imageObj.width=794-this.margin;
+      imageObj.height=1122-this.margin;
       bodyContent.appendChild(imageObj);
     }
 

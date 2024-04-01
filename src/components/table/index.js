@@ -322,8 +322,9 @@ export default class Table {
     const {_data, _renderer, _overlayer} = this;
     for (let prop in this._rendererOptions) {
       const propValue = this._rendererOptions[prop];
-      if (propValue)
+      if (propValue){
         _renderer[prop](propValue);
+      }
     }
     _renderer
         .scrollRows(_data.scroll[0])

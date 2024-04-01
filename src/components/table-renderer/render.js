@@ -34,7 +34,7 @@ function renderArea(type, canvas, area, renderer) {
   let borders;
   let row;
   let col;
-  const { _rowHeader, _colHeader } = renderer;
+  const { _rowHeader, _colHeader, _displayMode } = renderer;
   if (type === 'row-header') {
     if (_rowHeader.width <= 0){
       return;
@@ -124,22 +124,27 @@ function renderArea(type, canvas, area, renderer) {
       const cellv = cell(r, c);
       // _render(cellv, rect, mergeCellStyle(r, c, cellv));
       if (type === 'body') {
-        renderCellGridline(canvas, gridline, rect);
+        if (!_displayMode){
+          renderCellGridline(canvas, gridline, rect);
+        }
         cellRender(canvas, cellv, rect, mergeCellStyle(r, c, cellv), cellRenderer, formatter);
       }
       else {
         cellRender(canvas, cellv, rect, mergeCellStyle(r, c, cellv), cellRenderer, formatter);
-        renderCellGridline(canvas, gridline, rect);
-
+        if (!_displayMode){
+          renderCellGridline(canvas, gridline, rect);
+        }
       }
     }
   });
-  // render cell border line
-  area.each((r, c, rect) => {
-    if (!cellMerges.has(`${r}_${c}`)) {
-      renderCellGridline(canvas, gridline, rect);
-    }
-  });
+  if (!_displayMode) {
+    // render cell border line
+    area.each((r, c, rect) => {
+      if (!cellMerges.has(`${r}_${c}`)) {
+        renderCellGridline(canvas, gridline, rect);
+      }
+    });
+  }
   // render merges
   // console.log(areaMergeRenderParams);
   areaMergeRenderParams.forEach((item) => {
@@ -147,7 +152,9 @@ function renderArea(type, canvas, area, renderer) {
     let rect = item[1];
     let cellStyle = item[2];
     cellRender(canvas, cellv, rect, cellStyle, cellRenderer, formatter);
-    renderCellGridline(canvas, gridline, rect);
+    if (!_displayMode) {
+      renderCellGridline(canvas, gridline, rect);
+    }
   });
   // render cell's defined borders
   area.each((r, c, rect) => {
@@ -168,7 +175,8 @@ function renderArea(type, canvas, area, renderer) {
   canvas.restore();
 }
 export function render(renderer) {
-  const { _width, _height, _target, _scale, _viewport, _freeze, _rowHeader, _colHeader, } = renderer;
+  console.log(renderer);
+  const { _width, _height, _target, _scale, _viewport, _freeze, _rowHeader, _colHeader, _displayMode} = renderer;
   if (_viewport) {
     const canvas = new Canvas(_target, _scale);
     canvas.size(_width, _height);
@@ -176,16 +184,22 @@ export function render(renderer) {
     const [headerArea1, headerArea21, headerArea23, headerArea3] = _viewport.headerAreas;
     // render-4
     renderArea('body', canvas, area4, renderer);
-    // render-1
-    renderArea('body', canvas, area1, renderer);
-    renderArea('col-header', canvas, headerArea1, renderer);
-    // render-3
-    renderArea('body', canvas, area3, renderer);
-    renderArea('row-header', canvas, headerArea3, renderer);
-    // render 2
-    renderArea('body', canvas, area2, renderer);
-    renderArea('col-header', canvas, headerArea21, renderer);
-    renderArea('row-header', canvas, headerArea23, renderer);
+    if (!_displayMode) {
+      // render-1
+      renderArea('body', canvas, area1, renderer);
+      renderArea('col-header', canvas, headerArea1, renderer);
+    }
+    if (!_displayMode) {
+      // render-3
+      renderArea('body', canvas, area3, renderer);
+      renderArea('row-header', canvas, headerArea3, renderer);
+    }
+    if (!_displayMode) {
+      // render 2
+      renderArea('body', canvas, area2, renderer);
+      renderArea('col-header', canvas, headerArea21, renderer);
+      renderArea('row-header', canvas, headerArea23, renderer);
+    }
     // render freeze 上面这些渲染的有重复就是为了实现冻结功能
     const [row, col] = _freeze;
     if (col > 0 || row > 0) {
@@ -197,26 +211,29 @@ export function render(renderer) {
       });
     }
     // render left-top
-    const { x, y } = area2;
-    if (x > 0 && y > 0) {
-      const { height } = _colHeader;
-      const { width } = _rowHeader;
-      const { bgcolor } = renderer._headerStyle;
-      if (bgcolor)
-        canvas
-            .save()
-            .prop({ fillStyle: bgcolor })
-            .rect(0, 0, width, height)
-            .fill()
-            .restore();
-      renderLines(canvas, renderer._headerGridline, () => {
-        canvas.line(0, height, width, height).line(width, 0, width, height);
-      });
+    if (!_displayMode) {
+      const {x, y} = area2;
+      if (x > 0 && y > 0) {
+        const {height} = _colHeader;
+        const {width} = _rowHeader;
+        const {bgcolor} = renderer._headerStyle;
+        if (bgcolor) {
+          canvas
+              .save()
+              .prop({fillStyle: bgcolor})
+              .rect(0, 0, width, height)
+              .fill()
+              .restore();
+        }
+        renderLines(canvas, renderer._headerGridline, () => {
+          canvas.line(0, height, width, height).line(width, 0, width, height);
+        });
+      }
     }
-
-    // render printPreviewLine
-    renderPrintPreview(canvas,area4,renderer);
-
+    if (!_displayMode){
+        // render printPreviewLine
+      renderPrintPreview(canvas, area4, renderer);
+    }
   }
 }
 function renderPrintPreview(canvas,area,renderer){

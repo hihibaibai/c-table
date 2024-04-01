@@ -141,6 +141,11 @@ export default class TableRenderer {
         this._target = target;
         this._width = width;
         this._height = height;
+        this._displayMode=false;
+    }
+    displayMode(value){
+        this._displayMode = value;
+        return this;
     }
     render() {
         this._viewport = new Viewport(this);

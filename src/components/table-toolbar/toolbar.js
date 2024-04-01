@@ -10,6 +10,7 @@ import Bgcolor from "../table-toolbar/button/bgcolor";
 import Textwrap from "../table-toolbar/button/textwrap";
 import Merge from "../table-toolbar/button/merge";
 import Border from "../table-toolbar/button/border"
+import Freeze from "@/components/table-toolbar/button/freeze";
 
 export default class toolbar {
   constructor(elementString, table) {
@@ -103,6 +104,10 @@ export default class toolbar {
     let border = new Border(this);
     this.container.append(border.el);
     this.buttons.set("border",border);
+
+    let freeze = new Freeze(this);
+    this.container.append(freeze.el);
+    this.buttons.set("freeze",freeze);
 
     // 在table组件内注入格式，这样在输入字符的时候就有格式可用了。
     table.toolbarStyle = this;

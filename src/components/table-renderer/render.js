@@ -184,19 +184,19 @@ export function render(renderer) {
     const [headerArea1, headerArea21, headerArea23, headerArea3] = _viewport.headerAreas;
     // render-4
     renderArea('body', canvas, area4, renderer);
-    if (!_displayMode) {
       // render-1
-      renderArea('body', canvas, area1, renderer);
+      renderArea('body', canvas, area1, renderer); // 这里的渲染是渲染冻结的部分
+    if (!_displayMode) {
       renderArea('col-header', canvas, headerArea1, renderer);
     }
-    if (!_displayMode) {
       // render-3
-      renderArea('body', canvas, area3, renderer);
+      renderArea('body', canvas, area3, renderer); // 这里的渲染是渲染冻结的部分
+    if (!_displayMode) {
       renderArea('row-header', canvas, headerArea3, renderer);
     }
-    if (!_displayMode) {
       // render 2
-      renderArea('body', canvas, area2, renderer);
+      renderArea('body', canvas, area2, renderer); // 这里的渲染是渲染冻结的部分
+    if (!_displayMode) {
       renderArea('col-header', canvas, headerArea21, renderer);
       renderArea('row-header', canvas, headerArea23, renderer);
     }

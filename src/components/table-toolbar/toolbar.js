@@ -10,7 +10,9 @@ import Bgcolor from "../table-toolbar/button/bgcolor";
 import Textwrap from "../table-toolbar/button/textwrap";
 import Merge from "../table-toolbar/button/merge";
 import Border from "../table-toolbar/button/border"
-import Freeze from "@/components/table-toolbar/button/freeze";
+import Freeze from "../table-toolbar/button/freeze";
+import Align from "../table-toolbar/button/align";
+import Valign from "../table-toolbar/button/valign";
 
 export default class toolbar {
   constructor(elementString, table) {
@@ -19,8 +21,8 @@ export default class toolbar {
       bold: false,
       italic: false,
       fontSize: 10,
-      align: 'left',//center,left,right
-      valign: 'middle',
+      align: 'left',// align: left | center | right
+      valign: 'middle',// valign: top | middle | bottom
       underline: false,
       strikethrough: false,
       color: '#0a0a0a',
@@ -105,9 +107,20 @@ export default class toolbar {
     this.container.append(border.el);
     this.buttons.set("border",border);
 
+    // 冻结按钮
     let freeze = new Freeze(this);
     this.container.append(freeze.el);
     this.buttons.set("freeze",freeze);
+
+    // 水平居中设置
+    let align = new Align(this);
+    this.container.append(align.el);
+    this.buttons.set("align", align);
+
+    // 垂直居中设置
+    let valign = new Valign(this);
+    this.container.append(valign.el);
+    this.buttons.set("valign", valign);
 
     // 在table组件内注入格式，这样在输入字符的时候就有格式可用了。
     table.toolbarStyle = this;

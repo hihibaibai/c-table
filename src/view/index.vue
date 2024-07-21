@@ -14,7 +14,8 @@
 </template>
 
 <script>
-import table from '@/components/table/index'
+// import table from '@/components/table/index'
+import table from '@/components/myTable/table';
 import toolbar from "@/components/table-toolbar/toolbar";
 // import table from '@wolf-table/table'
 // import spreadSheet from 'x-data-spreadsheet'
@@ -70,14 +71,15 @@ export default {
 			//   width:()=>{1200},
 			//   height:()=>{400}
 			// })
-			this.xs = table.create('#tablePlace', () => 1200, () => 400, {
-				scrollable: true,
-				resizable: true,
-				selectable: true,
-				editable: true,
-				copyable: true,
-			}).render();
-			this.toolbar = toolbar.create('#toolbar', this.xs);
+			// this.xs = table.create(document.querySelector('#tablePlace'), () => 1200, () => 400, {
+			// 	scrollable: true,
+			// 	resizable: true,
+			// 	selectable: true,
+			// 	editable: true,
+			// 	copyable: true,
+			// }).render();
+      this.xs = table.create(document.querySelector('#tablePlace'), 1200, 400).render();
+			// this.toolbar = toolbar.create('#toolbar', this.xs);
 		}
 	}
 }

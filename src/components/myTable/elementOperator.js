@@ -1,8 +1,22 @@
 export default class ElementOperator{
-  showElement(element){
+  static showElement(element) {
     element.style.display = 'block';
   }
-  hideElement(element){
+
+  static hideElement(element) {
     element.style.display = 'none';
+  }
+
+  static setWidth(element, width) {
+    console.log(width);
+    element.style.setProperty('width',width);
+  }
+
+  static setHeight(element, height) {
+    element.style.setProperty('height', height);
+  }
+
+  static setClass(element, className) {
+    element.className = className;
   }
 }

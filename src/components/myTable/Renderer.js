@@ -1,3 +1,5 @@
+import Cells from '@/components/myTable/cells';
+
 /**
  * 这个渲染器会根据传入的ctx和数据，以及传入的固定的默认表头格式渲染数据
  */
@@ -22,7 +24,7 @@ export default class Renderer {
       'rowHeight': 25,
       'colWidth': 100,
       'style': {
-        'bgcolor': '#FFF',
+        'bgcolor': '#f0f000',
         'color': '#333',
         'align': 'left',
         'valign': 'middle',
@@ -61,7 +63,7 @@ export default class Renderer {
       'cells': [
         [0, 1, {'value': '#{SP_Q_KCPDB.商品编号}'}],
         [0, 2, {'value': '#{SP_Q_KCPDB.商品编号}'}],
-        [2, 0, {'value': '', 'border': 0}],
+        [2, 0, {'value': '', 'border': 0,'style': 0}],
         [2, 1, {'value': '', 'border': 0}],
         [2, 2, {'border': 0, 'style': 0}],
         [3, 0, {'value': '', 'border': 0}],
@@ -133,14 +135,188 @@ function renderDataPart(canvasContext, canvasWidth, canvasHeight, data, scrollPo
   const endY = y;
 
   canvasContext.save();
-  canvasContext.beginPath();
   canvasContext.translate(xOffset, yOffset);
+  // 先渲染单元格
+  let heightOffset = 0;
   for (y = startY; y <= endY; y++) {
+    let cellHeight = data.rows[y] ? Number(data.rows[y]) : data.rowHeight;
+    let widthOffset = 0;
     for (x = startX; x <= endX; x++) {
+      let cellWidth = data.cols[x] ? Number(data.cols[x]) : data.colWidth;
+      let cell = Cells.getCell(data, x, y);
+      console.log(x, y, data);
+      console.log(cell);
+      let text = cell.value ? cell.value : '';
+      let style;
+      if (!!data.styles[cell.style]) {
+        style = data.styles[cell.style];
+      }
+      else {
+        style = data.style;
+      }
+      const {
+        fontSize,
+        fontFamily,
+        bold,
+        italic,
+        color,
+        bgcolor,
+        align,
+        valign,
+        underline,
+        strikethrough,
+        textwrap,
+      } = style;
 
+      canvasContext.save();
+      canvasContext.beginPath();
+      canvasContext.translate(widthOffset, heightOffset);
+      // 开始绘制数据
+      canvasContext.rect(0, 0, cellWidth, cellHeight);
+      canvasContext.clip();
+
+      if (bgcolor) {
+        canvasContext.fillStyle = bgcolor;
+        canvasContext.fill();
+      }
+      // 绘制文本
+      canvasContext.textAlign = align;
+      canvasContext.textBaseline = valign;
+      canvasContext.fontFamily = fontFamily;
+      canvasContext.fontSize = `${fontSize}pt`;
+      canvasContext.bold = bold;
+      canvasContext.italic = italic;
+      canvasContext.fillStyle = color;
+      // 下面这部分实际绘制文本的代码是复制的，我觉得可读性太差了，之后会写成我能读懂的
+      const [xPadding, yPadding] = [5, 5];
+      const tx = textx(align, cellWidth, xPadding);
+      const txts = text.split('\n');
+      const innerWidth = cellWidth - xPadding * 2;
+      const ntxts = [];
+      txts.forEach((item) => {
+        const txtWidth = canvasContext.measureText(item).width;
+        if (textwrap && txtWidth > innerWidth) {
+          let txtLine = {w: 0, len: 0, start: 0};
+          for (let i = 0; i < item.length; i += 1) {
+            if (txtLine.w > innerWidth) {
+              ntxts.push(item.substr(txtLine.start, txtLine.len));
+              txtLine = {w: 0, len: 0, start: i};
+            }
+            txtLine.len += 1;
+            txtLine.w += canvasContext.measureText(item[i]).width + 1;
+          }
+          if (txtLine.len > 0) {
+            ntxts.push(item.substr(txtLine.start, txtLine.len));
+          }
+        }
+        else {
+          ntxts.push(item);
+        }
+      });
+      const fontHeight = fontSize / 0.75; // pt => px
+      const txtHeight = (ntxts.length - 1) * fontHeight;
+      const lineTypes = [];
+      if (underline) {
+        lineTypes.push('underline');
+      }
+      if (strikethrough) {
+        lineTypes.push('strikethrough');
+      }
+      let ty = texty(valign, cellHeight, txtHeight, fontHeight, yPadding);
+      ntxts.forEach((item) => {
+        const txtWidth = canvasContext.measureText(item).width;
+        canvasContext.fillText(item, tx, ty);
+        lineTypes.forEach((type) => {
+          let lineCoordination = textLine(type, align, valign, tx, ty, txtWidth,
+              fontSize);
+          canvasContext.moveTo(lineCoordination[0], lineCoordination[1]);
+          canvasContext.lineTo(lineCoordination[2], lineCoordination[3]);
+          canvasContext.stroke();
+        });
+        ty += fontHeight;
+      });
+
+      // 结束本单元格的绘制
+      canvasContext.closePath();
+      canvasContext.restore();
+
+      // 设置下一列的初始x位置
+      widthOffset = widthOffset + cellWidth;
     }
+
+    // 设置下一行的初始y位置
+    heightOffset = heightOffset + cellHeight;
   }
 
 
+  // canvasContext.closePath();
   canvasContext.restore();
+}
+
+// align: left | center | right
+// width: the width of cell
+// padding: the padding of cell
+function textx(align, width, padding) {
+  switch (align) {
+    case 'left':
+      return padding;
+    case 'center':
+      return width / 2;
+    case 'right':
+      return width - padding;
+    default:
+      return 0;
+  }
+}
+
+// align: top | middle | bottom
+// height: the height of cell
+// txtHeight: the height of text
+// padding: the padding of cell
+function texty(align, height, txtHeight, fontHeight, padding) {
+  switch (align) {
+    case 'top':
+      return padding;
+    case 'middle':
+      let y = height / 2 - txtHeight / 2;
+      const minHeight = fontHeight / 2 + padding;
+      return y < minHeight ? minHeight : y;
+    case 'bottom':
+      return height - padding - txtHeight;
+    default:
+      return 0;
+  }
+}
+
+// type: underline | strike
+// align: left | center | right
+// valign: top | middle | bottom
+function textLine(type, align, valign, x, y, w, h) {
+  // y
+  let ty = 0;
+  if (type === 'underline') {
+    if (valign === 'top') {
+      ty = -h;
+    }
+    else if (valign === 'middle') {
+      ty = -h / 2;
+    }
+  }
+  else if (type === 'strikethrough') {
+    if (valign === 'top') {
+      ty = -h / 2;
+    }
+    else if (valign === 'bottom') {
+      ty = h / 2;
+    }
+  }
+  // x
+  let tx = 0;
+  if (align === 'center') {
+    tx = w / 2;
+  }
+  else if (align === 'right') {
+    tx = w;
+  }
+  return [x - tx, y - ty, x - tx + w, y - ty];
 }

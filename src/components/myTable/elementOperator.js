@@ -8,7 +8,6 @@ export default class ElementOperator{
   }
 
   static setWidth(element, width) {
-    console.log(width);
     element.style.setProperty('width',width);
   }
 

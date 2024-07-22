@@ -61,7 +61,7 @@ export default class Table {
     ElementOperator.setClass(container, stylePrefix + '--container');
     ElementOperator.setWidth(container, `${width}px`);
     ElementOperator.setHeight(container, `${height}px`);
-    console.log(container);
+    // console.log(container);
 
     // 初始化数据
     this.data = JSON.parse(JSON.stringify(defaultData));

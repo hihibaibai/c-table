@@ -178,6 +178,7 @@ function renderDataPart(canvasContext, canvasWidth, canvasHeight, data, scrollPo
         canvasContext.fillStyle = bgColor;
         canvasContext.fill();
       }
+      canvasContext.closePath();
       // 绘制文本
       canvasContext.textAlign = align;
       canvasContext.textBaseline = valign;
@@ -227,8 +228,10 @@ function renderDataPart(canvasContext, canvasWidth, canvasHeight, data, scrollPo
       const textHeight = (lineOfTexts.length) * fontHeight;
       let textYPosition = getTextYPosition(valign, cellHeight, textHeight, fontHeight, yPadding);
       for (let lineOfText of lineOfTexts) {
+        canvasContext.beginPath();
         const textWidth = canvasContext.measureText(lineOfText).width;
         canvasContext.fillText(lineOfText,textXPosition,textYPosition);
+        canvasContext.closePath();
         // 绘制好了字符之后，绘制下划线和划线
         let lineCoordination = [];
         if (strikethrough) {
@@ -239,10 +242,11 @@ function renderDataPart(canvasContext, canvasWidth, canvasHeight, data, scrollPo
           lineCoordination = getTextLineCoord('underline', align, valign,
               textXPosition, textYPosition, textWidth, fontSize);
         }
+        canvasContext.beginPath();
         canvasContext.moveTo(lineCoordination[0], lineCoordination[1]);
         canvasContext.lineTo(lineCoordination[2], lineCoordination[3]);
         canvasContext.stroke();
-
+        canvasContext.closePath();
         textYPosition = textYPosition + fontHeight;// 为第二行做准备
       }
       // const lineTypes = [];

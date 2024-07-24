@@ -8,6 +8,7 @@ const defaultRowHeight = 25;
 const headerWidth = 50;
 const headerHeight = 26;
 
+const gridLineColor = '#eaeaea';
 
 
 
@@ -24,7 +25,7 @@ export default class Renderer {
       'rowHeight': 25,
       'colWidth': 100,
       'style': {
-        'bgColor': '#f0f0f0',
+        'bgColor': '#FFF',
         'color': '#333',
         'align': 'left',
         'valign': 'middle',
@@ -205,8 +206,7 @@ function renderDataPart(canvasContext, canvasWidth, canvasHeight, data, scrollPo
       const lineOfTexts = [];
       const textWidth = canvasContext.measureText(text).width;
       if (textWrap && textWidth > innerWidth) { // 需要做字符串的换行，这里不用自带的换行是因为不能自定义padding
-        // 这里一个字符一个字符的测试字符长度，直到超出了给定的宽度，再换行继续测
-        let startingIndex = 0;
+        let startingIndex = 0;  // 这里一个字符一个字符的测试字符长度，直到超出了给定的宽度，再换行继续测
         let stringLength = 0;
         for (let i = 0; i < text.length; i++) {
           let testString = text.substring(startingIndex, i);
@@ -249,29 +249,8 @@ function renderDataPart(canvasContext, canvasWidth, canvasHeight, data, scrollPo
         canvasContext.closePath();
         textYPosition = textYPosition + fontHeight;// 为第二行做准备
       }
-      // const lineTypes = [];
-      // if (underline) {
-      //   lineTypes.push('underline');
-      // }
-      // if (strikethrough) {
-      //   lineTypes.push('strikethrough');
-      // }
-      // let ty = texty(valign, cellHeight, txtHeight, fontHeight, yPadding);
-      // ntxts.forEach((item) => {
-      //   const txtWidth = canvasContext.measureText(item).width;
-      //   canvasContext.fillText(item, tx, ty);
-      //   lineTypes.forEach((type) => {
-      //     let lineCoordination = textLine(type, align, valign, tx, ty, txtWidth,
-      //         fontSize);
-      //     canvasContext.moveTo(lineCoordination[0], lineCoordination[1]);
-      //     canvasContext.lineTo(lineCoordination[2], lineCoordination[3]);
-      //     canvasContext.stroke();
-      //   });
-      //   ty += fontHeight;
-      // });
 
       // 结束本单元格的绘制
-      canvasContext.closePath();
       canvasContext.restore();
 
       // 设置下一列的初始x位置
@@ -282,8 +261,149 @@ function renderDataPart(canvasContext, canvasWidth, canvasHeight, data, scrollPo
     heightOffset = heightOffset + cellHeight;
   }
 
+  // 再次渲染网格，不然网格的显示会有问题
+  x = scrollPosition[0];
+  y = scrollPosition[1];
+  heightOffset = 0;
+  for (y = startY; y <= endY; y++) {
+    let cellHeight = data.rows[y] ? Number(data.rows[y]) : data.rowHeight;
+    let widthOffset = 0;
+    for (x = startX; x <= endX; x++) {
+      let cellWidth = data.cols[x] ? Number(data.cols[x]) : data.colWidth;
+      let cell = Cells.getCell(data, x, y);
+      let text = cell.value ? cell.value : '';
+      let style;
+      if (!!data.styles[cell.style]) {
+        style = data.styles[cell.style];
+      }
+      else {
+        style = data.style;
+      }
+      const {
+        fontSize,
+        fontFamily,
+        bold,
+        italic,
+        color,
+        bgColor,
+        align,
+        valign,
+        underline,
+        strikethrough,
+        textWrap,
+      } = style;
 
-  // canvasContext.closePath();
+      canvasContext.save();
+      canvasContext.beginPath();
+      canvasContext.translate(widthOffset, heightOffset);
+      canvasContext.lineWidth = 1;
+      canvasContext.strokeStyle = gridLineColor;
+      canvasContext.moveTo(cellWidth, 0);
+      canvasContext.lineTo(cellWidth, cellHeight);
+      canvasContext.lineTo(0, cellHeight);
+      canvasContext.stroke();
+
+      canvasContext.closePath();
+      canvasContext.restore();
+
+      widthOffset = widthOffset + cellWidth;
+    }
+    heightOffset = heightOffset + cellHeight;
+  }
+
+  // 接着处理边框
+  x = scrollPosition[0];
+  y = scrollPosition[1];
+  heightOffset = 0;
+  for (y = startY; y <= endY; y++) {
+    let cellHeight = data.rows[y] ? Number(data.rows[y]) : data.rowHeight;
+    let widthOffset = 0;
+    for (x = startX; x <= endX; x++) {
+      let cellWidth = data.cols[x] ? Number(data.cols[x]) : data.colWidth;
+      let cell = Cells.getCell(data, x, y);
+      let text = cell.value ? cell.value : '';
+      let border;
+      if (!!data.borders[cell.border]) {
+        border = data.borders[cell.border];
+      }
+      else {
+        border = data.style;
+      }
+
+      canvasContext.save();
+      canvasContext.translate(widthOffset, heightOffset);
+
+      const borderTypes = Object.keys(border);
+      borderTypes.forEach((type) => {
+        const borderLineStyle = border[type][0];
+        const borderColor = border[type][1];
+        let x1;
+        let y1;
+        let x2;
+        let y2;
+        switch (type){
+          case 'top':
+            x1=0;
+            y1=0;
+            x2=cellWidth;
+            y2=0;
+            break;
+          case 'right':
+            x1=cellWidth;
+            y1=0;
+            x2=cellWidth;
+            y2=cellHeight;
+            break;
+          case 'bottom':
+            x1=0;
+            y1=cellHeight;
+            x2=cellWidth;
+            y2=cellHeight;
+            break;
+          case 'left':
+            x1=0;
+            y1=0;
+            x2=0;
+            y2=cellHeight;
+            break;
+          default:
+            break;
+        }
+        let lineDash = [];
+        let lineWidth = 1;
+        switch (borderLineStyle){
+          case 'thick':
+            lineWidth = 3;
+            break;
+          case 'medium':
+            lineWidth = 2;
+            break;
+          case 'dotted':
+            lineDash = [1, 1];
+            break;
+          case 'dashed':
+            lineDash = [2, 2];
+            break;
+          default:
+            break;
+        }
+
+        canvasContext.beginPath();
+        canvasContext.strokeStyle = borderColor;
+        canvasContext.lineWidth = lineWidth;
+        canvasContext.setLineDash(lineDash);
+        canvasContext.moveTo(x1, y1);
+        canvasContext.lineTo(x2, y2);
+        canvasContext.stroke();
+        canvasContext.closePath();
+
+      });
+      canvasContext.restore();
+
+      widthOffset = widthOffset + cellWidth;
+    }
+    heightOffset = heightOffset + cellHeight;
+  }
   canvasContext.restore();
 }
 

@@ -2,6 +2,7 @@ import {stylePrefix} from './config';
 import OverLayer from '@/components/myTable/overLayer';
 import ElementOperator from '@/components/myTable/elementOperator';
 import Renderer from '@/components/myTable/Renderer';
+import ScrollBar from '@/components/myTable/scrollBar';
 
 const defaultData = {
   rows: {
@@ -61,6 +62,9 @@ export default class Table {
     ElementOperator.setClass(container, stylePrefix + '--container');
     ElementOperator.setWidth(container, `${width}px`);
     ElementOperator.setHeight(container, `${height}px`);
+    ElementOperator.setPosition(container, 'relative');
+    ElementOperator.setOverflow(element, 'hidden');
+
     // console.log(container);
 
     // 初始化数据
@@ -82,6 +86,9 @@ export default class Table {
     // 在画布上放多个重叠的透明元素，这个元素负责点击事件之类的，在单元框被点击的时候，这些透明元素会变色来显示选中
     this.overLayer = new OverLayer(container);
 
+    // 初始化滚动条
+    console.log(height);
+    this.scrollBar = new ScrollBar(container, width, height);
   }
 
   setData(data){

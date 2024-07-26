@@ -1,7 +1,7 @@
 import {stylePrefix} from './config';
 import OverLayer from '@/components/myTable/overLayer';
 import ElementOperator from '@/components/myTable/elementOperator';
-import Renderer from '@/components/myTable/Renderer';
+import Renderer from '@/components/myTable/renderer';
 import ScrollBar from '@/components/myTable/scrollBar';
 
 const defaultData = {

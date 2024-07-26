@@ -15,6 +15,14 @@ export default class ElementOperator{
     element.style.setProperty('height', height);
   }
 
+  static setPosition(element, position) {
+    element.style.setProperty('position', position);
+  }
+
+  static setOverflow(element, overflow) {
+    element.style.setProperty('overflow', overflow);
+  }
+
   static setClass(element, className) {
     element.className = className;
   }

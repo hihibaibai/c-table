@@ -76,7 +76,7 @@ export default class Renderer {
         [4, 2, {'value': '', 'border': 0}],
       ],
     },
-    scrollPosition: [0, 0], // 第一个元素是左侧第几个单元格开始，第二个元素是上边第几个单元格开始
+    viewport: [0, 0, 0, 0], // 第一个元素是左侧第几个单元格开始，第二个元素是上边第几个单元格开始
   };
 
   constructor(canvasContext, width, height) {
@@ -86,8 +86,9 @@ export default class Renderer {
   }
 
   render(renderData) {
-    renderData = this.defaultRenderData;
-    if (!(renderData.scrollPosition instanceof Array && renderData.scrollPosition.length === 2)){
+    // renderData = this.defaultRenderData;
+    console.log(renderData.viewport);
+    if (!(renderData.viewport instanceof Array && renderData.viewport.length === 4)){
       throw new Error('滚动条格式不正确');
     }
 
@@ -96,21 +97,22 @@ export default class Renderer {
     const xOffset = headerWidth;
     const yOffset = headerHeight;
     renderDataPart(this.canvasContext, this.canvasWidth, this.canvasHeight,
-        renderData.data, renderData.scrollPosition,
+        renderData.data, renderData.viewport,
         xOffset, yOffset);
   }
 };
 
-function renderDataPart(canvasContext, canvasWidth, canvasHeight, data, scrollPosition, xOffset, yOffset) {
+function renderDataPart(canvasContext, canvasWidth, canvasHeight, data, viewport, xOffset, yOffset) {
   // 先确定渲染的宽高，再确定需要渲染多少行、多少列单元格
   const renderWidth = canvasWidth - xOffset;
   const renderHeight = canvasHeight - yOffset;
   let widthCount = 0;
   let heightCount = 0;
-  let x = scrollPosition[0];
-  let y = scrollPosition[1];
-  const startX = scrollPosition[0];
-  const startY = scrollPosition[1];
+  let x = viewport[0];
+  let y = viewport[1];
+  console.log("renderingStartXandY",x,y);
+  const startX = viewport[0];
+  const startY = viewport[1];
   while (renderWidth - widthCount >= 0) {
     let cellWidth = 0;
     if (data.cols[x]) {
@@ -259,8 +261,8 @@ function renderDataPart(canvasContext, canvasWidth, canvasHeight, data, scrollPo
   }
 
   // 再次渲染网格，不然网格的显示会有问题
-  x = scrollPosition[0];
-  y = scrollPosition[1];
+  x = viewport[0];
+  y = viewport[1];
   heightOffset = 0;
   for (y = startY; y <= endY; y++) {
     let cellHeight = data.rows[y] ? Number(data.rows[y]) : data.rowHeight;
@@ -309,8 +311,8 @@ function renderDataPart(canvasContext, canvasWidth, canvasHeight, data, scrollPo
   }
 
   // 接着处理边框
-  x = scrollPosition[0];
-  y = scrollPosition[1];
+  x = viewport[0];
+  y = viewport[1];
   heightOffset = 0;
   for (y = startY; y <= endY; y++) {
     let cellHeight = data.rows[y] ? Number(data.rows[y]) : data.rowHeight;

@@ -87,12 +87,13 @@ export default class Table {
     this.overLayer = new OverLayer(container);
 
     // 初始化滚动条
-    console.log(height);
-    this.scrollBar = new ScrollBar(container, width, height);
+    this.scrollBar = new ScrollBar(container, width, height, this);
+    this.scrollBar.setData(this.data);
   }
 
   setData(data){
     this.data = data;
+    this.scrollBar.setData(this.data);
     return this;
   }
 
@@ -104,7 +105,7 @@ export default class Table {
    * 渲染表单
    */
   render(){
-    this.renderer.render();
+    this.renderer.render({data: this.data, viewport: this.scrollBar.getViewport()});
     return this;
   }
 

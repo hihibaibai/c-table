@@ -78,7 +78,65 @@ export default {
 			// 	editable: true,
 			// 	copyable: true,
 			// }).render();
-      this.xs = table.create(document.querySelector('#tablePlace'), 1200, 400).render();
+      let data = {
+          'rows': {},
+          'cols': {},
+          'rowHeight': 25,
+          'colWidth': 100,
+          'style': {
+            'bgColor': '#FFF',
+            'color': '#333',
+            'align': 'left',
+            'valign': 'middle',
+            'textWrap': false,
+            'bold': false,
+            'italic': false,
+            'fontFamily': 'Roboto',
+            'fontSize': 12,
+            'underline': false,
+            'strikethrough': false,
+            'border': {},
+          },
+          'styles': [
+            {
+              'bgColor': '#000100',
+              'color': '#333',
+              'align': 'left',
+              'valign': 'middle',
+              'textWrap': false,
+              'bold': false,
+              'italic': false,
+              'fontFamily': 'Roboto',
+              'fontSize': 12,
+              'underline': false,
+              'strikethrough': false,
+              'border': {},
+            }],
+          'borders': [
+            {
+              'top': ['thin', '#000'],
+              'left': ['thin', '#000'],
+              'right': ['thin', '#000'],
+              'bottom': ['thin', '#000'],
+            }
+          ],
+          "merges":[{sx:1,sy:0,ex:2,ey:0},{sx:1,sy:4,ex:2,ey:4}],//startX,startY,endX,endY 所有的合并单元格中显示的数据以sx，sy为准
+          'cells': [
+            [0, 1, {'value': '#{SP_Q_KCPDB.商品编号}', 'border': 0}],
+            [2, 0, {'value': '', 'border': 0}],
+            [2, 1, {'value': '', 'border': 0}],
+            [2, 2, {'border': 0, 'style': 0}],
+            [3, 0, {'value': '', 'border': 0}],
+            [3, 1, {'value': '', 'border': 0}],
+            [3, 2, {'border': 0, 'style': 0}],
+            [4, 0, {'value': '', 'border': 0}],
+            [4, 1, {'value': '', 'border': 0}],
+            [4, 2, {'value': '', 'border': 0}],
+          ],
+        };
+      this.xs = table.create(document.querySelector('#tablePlace'), 1200, 400)
+      this.xs.setData(data);
+      this.xs.render();
 			// this.toolbar = toolbar.create('#toolbar', this.xs);
 		}
 	}

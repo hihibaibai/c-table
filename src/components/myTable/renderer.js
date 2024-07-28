@@ -1,5 +1,6 @@
 import Cells from '@/components/myTable/cells';
 import Merge from '@/components/myTable/merge';
+import {stringAt} from '@/components/myTable/alphabetUtil';
 
 /**
  * 这个渲染器会根据传入的ctx和数据，以及传入的固定的默认表头格式渲染数据
@@ -99,6 +100,10 @@ export default class Renderer {
     renderDataPart(this.canvasContext, this.canvasWidth, this.canvasHeight,
         renderData.data, renderData.viewport,
         xOffset, yOffset);
+
+    // 渲染表头的时候，要处理冻结表格的情况
+    renderTableHeader(this.canvasContext, this.canvasWidth, this.canvasHeight,
+        renderData.data, renderData.viewport);
   }
 };
 
@@ -621,6 +626,99 @@ function renderDataPart(canvasContext, canvasWidth, canvasHeight, data, viewport
   });
 
   canvasContext.restore();
+}
+
+function renderTableHeader(canvasContext, canvasWidth, canvasHeight, data,viewport) {
+  // 先做横向的header
+  // 确定横向的header大小
+  const rowHeaderWidth = canvasWidth - headerWidth;
+  const rowHeaderHeight = headerHeight;
+  const colHeaderHeight = canvasHeight - headerHeight;
+  const colHeaderWidth = headerWidth;
+  let widthCount = 0;
+  let heightCount = 0;
+  let x = viewport[0];
+  let y = viewport[1];
+  const startX = viewport[0];
+  const startY = viewport[1];
+  while (rowHeaderWidth - widthCount >= 0) {
+    let cellWidth = 0;
+    if (data.cols[x]) {
+      cellWidth = data.cols[x];
+    }
+    else {
+      cellWidth = data.colWidth;
+    }
+    widthCount = widthCount + cellWidth;
+    x++;
+  }
+  while (colHeaderHeight - heightCount >= 0) {
+    let cellHeight = 0;
+    if (data.rows[y]) {
+      cellHeight = data.rows[y];
+    }
+    else {
+      cellHeight = data.rowHeight;
+    }
+    heightCount = heightCount + cellHeight;
+    y++;
+  }
+  const endX = x;
+  const endY = y;
+
+  // 渲染纵向的表头
+  let heightOffset = headerHeight;
+  for (y = startY; y <= endY; y++) {
+    let cellHeight = data.rows[y] ? Number(data.rows[y]) : data.rowHeight;
+    canvasContext.save();
+    canvasContext.beginPath();
+    canvasContext.translate(0, heightOffset);
+    canvasContext.rect(0, 0, headerWidth, cellHeight);
+    canvasContext.clip();
+    canvasContext.fillStyle = '#f4f5f8';
+    canvasContext.fill();
+    canvasContext.fillStyle = '#585757';
+    canvasContext.font = '12px sans-serif';
+    canvasContext.textAlign = 'center';
+    canvasContext.textBaseline = 'middle';
+    const textXPosition = getTextXPosition('center', headerWidth, 5);
+    const fontHeight = 12 / 0.75; // pt => px
+    const textHeight = fontHeight;
+    const textYPosition = getTextYPosition('middle', cellHeight, textHeight, fontHeight, 5);
+    canvasContext.fillText(y+1,textXPosition,textYPosition);
+    // canvasContext.fillStyle='#888'
+    // canvasContext.fill();
+    canvasContext.closePath();
+    canvasContext.restore();
+    heightOffset = heightOffset + cellHeight;
+  }
+
+  // 渲染横向的表头
+  let widthOffset = headerWidth;
+  for (x = startX; x <= endX; x++) {
+    let cellWidth = data.cols[x] ? Number(data.cols[x]) : data.colWidth;
+
+    canvasContext.save();
+    canvasContext.beginPath();
+    canvasContext.translate(widthOffset, 0);
+    canvasContext.rect(0, 0, cellWidth, headerHeight);
+    canvasContext.clip();
+    canvasContext.fillStyle = '#f4f5f8';
+    canvasContext.fill();
+    canvasContext.fillStyle = '#585757';
+    canvasContext.font = '12px sans-serif';
+    canvasContext.textAlign = 'center';
+    canvasContext.textBaseline = 'middle';
+    const textXPosition = getTextXPosition('center', cellWidth, 5);
+    const fontHeight = 12 / 0.75; // pt => px
+    const textHeight = fontHeight;
+    const textYPosition = getTextYPosition('middle', rowHeaderHeight, textHeight, fontHeight, 5);
+    canvasContext.fillText(stringAt(x),textXPosition,textYPosition);
+    canvasContext.closePath();
+    canvasContext.restore();
+    widthOffset = widthOffset + cellWidth;
+  }
+
 }
 
 // align: left | center | right

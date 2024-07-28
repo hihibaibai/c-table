@@ -60,6 +60,7 @@ export default class ScrollBar {
       table.render();
     }
     this.vScrollBar.addEventListener('scroll', handleScrollEvent);
+    this.hScrollBar.addEventListener('scroll', handleScrollEvent);
     const foobar = () => {
       let height = 63;
       let {rows,rowHeight} = this.data;

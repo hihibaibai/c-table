@@ -93,8 +93,8 @@ export default class Renderer {
       throw new Error('滚动条格式不正确');
     }
 
-    // 这里的渲染顺序始终是从第四象限开始的，表头的部分是最后贴上去的
-    // 第四象限主要放数据的，按照以下的顺序渲染 背景颜色-》数据-》合并单元格背景-》合并单元格数据-》边框-》合并单元格边框
+    // 这里的渲染顺序始终是从第四象限开始的，按照以下的顺序渲染 背景颜色-》数据-》合并单元格背景-》合并单元格数据-》边框-》合并单元格边框
+    // 这里的xOffset和yOffset只是暂时这个样子的，之后要处理冻结的时候这个值会改的
     const xOffset = headerWidth;
     const yOffset = headerHeight;
     renderDataPart(this.canvasContext, this.canvasWidth, this.canvasHeight,
@@ -675,7 +675,7 @@ function renderTableHeader(canvasContext, canvasWidth, canvasHeight, data,viewpo
     canvasContext.translate(0, heightOffset);
     canvasContext.rect(0, 0, headerWidth, cellHeight);
     canvasContext.clip();
-    canvasContext.fillStyle = '#f4f5f8';
+    canvasContext.fillStyle = '#fbfbfd';
     canvasContext.fill();
     canvasContext.fillStyle = '#585757';
     canvasContext.font = '12px sans-serif';
@@ -686,8 +686,13 @@ function renderTableHeader(canvasContext, canvasWidth, canvasHeight, data,viewpo
     const textHeight = fontHeight;
     const textYPosition = getTextYPosition('middle', cellHeight, textHeight, fontHeight, 5);
     canvasContext.fillText(y+1,textXPosition,textYPosition);
-    // canvasContext.fillStyle='#888'
-    // canvasContext.fill();
+    canvasContext.closePath();
+
+    canvasContext.beginPath();
+    canvasContext.moveTo(0, headerHeight-1);
+    canvasContext.lineTo(headerWidth, headerHeight-1);
+    canvasContext.strokeStyle = '#ababab';
+    canvasContext.stroke();
     canvasContext.closePath();
     canvasContext.restore();
     heightOffset = heightOffset + cellHeight;
@@ -714,6 +719,13 @@ function renderTableHeader(canvasContext, canvasWidth, canvasHeight, data,viewpo
     const textHeight = fontHeight;
     const textYPosition = getTextYPosition('middle', rowHeaderHeight, textHeight, fontHeight, 5);
     canvasContext.fillText(stringAt(x),textXPosition,textYPosition);
+    canvasContext.closePath();
+    canvasContext.beginPath();
+    canvasContext.fillRect(cellWidth,0,10,10)
+    canvasContext.moveTo(cellWidth, 0);
+    canvasContext.lineTo(cellWidth, headerHeight);
+    canvasContext.strokeStyle = '#ababab';
+    canvasContext.stroke();
     canvasContext.closePath();
     canvasContext.restore();
     widthOffset = widthOffset + cellWidth;

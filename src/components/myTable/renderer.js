@@ -689,9 +689,8 @@ function renderTableHeader(canvasContext, canvasWidth, canvasHeight, data,viewpo
     canvasContext.closePath();
 
     canvasContext.beginPath();
-    canvasContext.moveTo(0, headerHeight-1);
-    canvasContext.lineTo(headerWidth, headerHeight-1);
-    canvasContext.strokeStyle = '#ababab';
+    canvasContext.strokeStyle = gridLineColor;
+    canvasContext.rect(0, 0, headerWidth, cellHeight);
     canvasContext.stroke();
     canvasContext.closePath();
     canvasContext.restore();
@@ -721,10 +720,10 @@ function renderTableHeader(canvasContext, canvasWidth, canvasHeight, data,viewpo
     canvasContext.fillText(stringAt(x),textXPosition,textYPosition);
     canvasContext.closePath();
     canvasContext.beginPath();
-    canvasContext.fillRect(cellWidth,0,10,10)
-    canvasContext.moveTo(cellWidth, 0);
-    canvasContext.lineTo(cellWidth, headerHeight);
-    canvasContext.strokeStyle = '#ababab';
+    canvasContext.fillRect(cellWidth,0,10,10);
+    canvasContext.strokeStyle = gridLineColor;
+    canvasContext.rect(0, 0, cellWidth, headerHeight);
+    canvasContext.strokeStyle = gridLineColor;
     canvasContext.stroke();
     canvasContext.closePath();
     canvasContext.restore();

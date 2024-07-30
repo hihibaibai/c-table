@@ -108,8 +108,8 @@ export default class ScrollBar {
       element.style.setProperty('opacity', '0.8');
     });
     element.addEventListener('mouseout', () => {
-      // element.style.setProperty('opacity', '0');
-      element.style.setProperty('opacity', '1');
+      element.style.setProperty('opacity', '0');
+      // element.style.setProperty('opacity', '1');
     });
     this.vScrollBar = element;
   }

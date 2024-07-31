@@ -3,30 +3,26 @@ import OverLayer from '@/components/myTable/overLayer';
 import ElementOperator from '@/components/myTable/elementOperator';
 import Renderer from '@/components/myTable/renderer';
 import ScrollBar from '@/components/myTable/scrollBar';
+import {eventInit} from '@/components/myTable/event';
 
 const defaultData = {
-  rows: {
-    len: 100,
-  },
-  cols: {
-    len: 26,
-  },
+  rows: {},
+  cols: {},
   rowHeight: 25,
   colWidth: 100,
-  scroll: [0, 0, 0, 0],
   style: {
-    bgcolor: '#FFF',
+    bgColor: '#FFF',
     color: '#333',
     align: 'left',
     valign: 'middle',
-    textwrap: false,
+    textWrap: false,
     bold: false,
     italic: false,
     fontFamily: 'Roboto',
     fontSize: 10,
     underline: false,
     strikethrough: false,
-    border: {}
+    border: {},
   },
   styles: [],
   borders: [],
@@ -77,6 +73,7 @@ export default class Table {
     const dpr = window.devicePixelRatio;
     this.canvas.width = Math.floor(width * dpr);
     this.canvas.height = Math.floor(height * dpr);
+    // this.canvas.setAttribute('tabIndex', '1');
     this.canvasContext = this.canvas.getContext('2d');
     this.canvasContext.scale(dpr, dpr);
     container.append(this.canvas);
@@ -84,11 +81,13 @@ export default class Table {
     this.renderer = new Renderer(this.canvasContext, width, height);
 
     // 在画布上放多个重叠的透明元素，这个元素负责点击事件之类的，在单元框被点击的时候，这些透明元素会变色来显示选中
-    this.overLayer = new OverLayer(container);
+    this.overLayer = new OverLayer(container, this.data, this.width, this.height);
 
     // 初始化滚动条
     this.scrollBar = new ScrollBar(container, width, height, this);
     this.scrollBar.setData(this.data);
+
+    eventInit(this);
   }
 
   setData(data){

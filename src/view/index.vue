@@ -134,9 +134,8 @@ export default {
             [4, 2, {'value': '', 'border': 0}],
           ],
         };
-      this.xs = table.create(document.querySelector('#tablePlace'), 1200, 400)
-      this.xs.setData(data);
-      this.xs.render();
+      this.xs = table.create(document.querySelector('#tablePlace'), 1200, 400).setData(data).render();
+      // this.xs.freeze('B3');
 			// this.toolbar = toolbar.create('#toolbar', this.xs);
 		}
 	}

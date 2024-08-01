@@ -16,7 +16,7 @@
 <script>
 // import table from '@/components/table/index'
 import table from '@/components/myTable/table';
-import toolbar from "@/components/table-toolbar/toolbar";
+// import toolbar from "@/components/table-toolbar/toolbar";
 // import table from '@wolf-table/table'
 // import spreadSheet from 'x-data-spreadsheet'
 import ezPrint from "@/components/ezPrint/ezPrint";
@@ -79,12 +79,29 @@ export default {
 			// 	copyable: true,
 			// }).render();
       let data = {
-          'rows': {},
-          'cols': {},
-          'rowHeight': 25,
-          'colWidth': 100,
-          'style': {
-            'bgColor': '#FFF',
+        'rows': {},
+        'cols': {},
+        'rowHeight': 25,
+        'colWidth': 100,
+        'headerWidth': 50,
+        'headerHeight': 26,
+        'style': {
+          'bgColor': '#FFF',
+          'color': '#333',
+          'align': 'left',
+          'valign': 'middle',
+          'textWrap': false,
+          'bold': false,
+          'italic': false,
+          'fontFamily': 'Roboto',
+          'fontSize': 12,
+          'underline': false,
+          'strikethrough': false,
+          'border': {},
+        },
+        'styles': [
+          {
+            'bgColor': '#000100',
             'color': '#333',
             'align': 'left',
             'valign': 'middle',
@@ -96,44 +113,29 @@ export default {
             'underline': false,
             'strikethrough': false,
             'border': {},
+          }],
+        'borders': [
+          {
+            'top': ['thin', '#000'],
+            'left': ['thin', '#000'],
+            'right': ['thin', '#000'],
+            'bottom': ['thin', '#000'],
           },
-          'styles': [
-            {
-              'bgColor': '#000100',
-              'color': '#333',
-              'align': 'left',
-              'valign': 'middle',
-              'textWrap': false,
-              'bold': false,
-              'italic': false,
-              'fontFamily': 'Roboto',
-              'fontSize': 12,
-              'underline': false,
-              'strikethrough': false,
-              'border': {},
-            }],
-          'borders': [
-            {
-              'top': ['thin', '#000'],
-              'left': ['thin', '#000'],
-              'right': ['thin', '#000'],
-              'bottom': ['thin', '#000'],
-            }
-          ],
-          "merges":[{sx:1,sy:0,ex:2,ey:0},{sx:1,sy:4,ex:2,ey:4}],//startX,startY,endX,endY 所有的合并单元格中显示的数据以sx，sy为准
-          'cells': [
-            [0, 1, {'value': '#{SP_Q_KCPDB.商品编号}', 'border': 0}],
-            [2, 0, {'value': '', 'border': 0}],
-            [2, 1, {'value': '', 'border': 0}],
-            [2, 2, {'border': 0, 'style': 0}],
-            [3, 0, {'value': '', 'border': 0}],
-            [3, 1, {'value': '', 'border': 0}],
-            [3, 2, {'border': 0, 'style': 0}],
-            [4, 0, {'value': '', 'border': 0}],
-            [4, 1, {'value': '', 'border': 0}],
-            [4, 2, {'value': '', 'border': 0}],
-          ],
-        };
+        ],
+        'merges': [{sx: 1, sy: 0, ex: 2, ey: 0}, {sx: 1, sy: 4, ex: 2, ey: 4}],//startX,startY,endX,endY 所有的合并单元格中显示的数据以sx，sy为准
+        'cells': [
+          [0, 1, {'value': '#{SP_Q_KCPDB.商品编号}', 'border': 0}],
+          [2, 0, {'value': '', 'border': 0}],
+          [2, 1, {'value': '', 'border': 0}],
+          [2, 2, {'border': 0, 'style': 0}],
+          [3, 0, {'value': '', 'border': 0}],
+          [3, 1, {'value': '', 'border': 0}],
+          [3, 2, {'border': 0, 'style': 0}],
+          [4, 0, {'value': '', 'border': 0}],
+          [4, 1, {'value': '', 'border': 0}],
+          [4, 2, {'value': '', 'border': 0}],
+        ],
+      };
       this.xs = table.create(document.querySelector('#tablePlace'), 1200, 400).setData(data).render();
       // this.xs.freeze('B3');
 			// this.toolbar = toolbar.create('#toolbar', this.xs);

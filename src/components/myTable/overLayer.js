@@ -6,6 +6,8 @@ const defaultData = { // 只是为了方便开发使用的
   cols: {},
   rowHeight: 25,
   colWidth: 100,
+  headerWidth: 50,
+  headerHeight: 26,
   style: {
     bgColor: '#FFF',
     color: '#333',
@@ -25,9 +27,6 @@ const defaultData = { // 只是为了方便开发使用的
   merges: [],
   cells: [],
 };
-
-const headerWidth = 50;
-const headerHeight = 26;
 
 export default class OverLayer {
   headOverLayerElement = [];
@@ -50,8 +49,8 @@ export default class OverLayer {
 
     }
     else {
-      let xOffset = headerWidth;
-      let yOffset = headerHeight;
+      let xOffset = data.headerWidth;
+      let yOffset = data.headerHeight;
       ElementOperator.setPosition(element,'absolute');
       ElementOperator.setWidth(element, `${width - xOffset}px`);
       ElementOperator.setHeight(element, `${height - yOffset}px`);

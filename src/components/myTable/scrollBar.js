@@ -1,3 +1,5 @@
+import Cells from '@/components/myTable/cells';
+
 export default class ScrollBar {
   vScrollBar;
   hScrollBar;
@@ -6,7 +8,7 @@ export default class ScrollBar {
   hWeight;
   hWeightWidth;
   data;
-  viewport = [0,0,0,0];// 左上角的
+  viewport = [0,0,0,0];// 这个是控制的是可以滚动部分的区域，冻结部分不在这里的
 
   constructor(container, width, height, table) {
     let {data} = table;
@@ -221,5 +223,46 @@ export default class ScrollBar {
       }
     }
     return i;
+  }
+
+  /**
+   * 这里的xOffset和yOffset并不只是数据部分的，也包括header部分的.
+   * 返回值中的placemen可能的值为row-header,col-header,body,all这4种
+   * @param xOffset
+   * @param yOffset
+   * @returns {{x: number, y: number, placement: string}}
+   */
+  getCellIndexByXYOffset(xOffset, yOffset) {
+    let cellPosition = {};
+    let {headerWidth,headerHeight} = this.data;
+    let width = xOffset - headerWidth;
+    let height = yOffset - headerHeight;
+    if (width < 0) {
+      width = 0;
+    }
+    if (height < 0) {
+      height = 0;
+    }
+    if (xOffset < headerWidth && yOffset < headerHeight) {
+      return cellPosition;
+    }
+    if (xOffset < headerWidth && yOffset > headerHeight) {
+      cellPosition.placement = 'row-header';
+      cellPosition.y = this.getTopHeightIndex(height);
+      cellPosition.y = cellPosition.y - 1 < 0 ? 0 : cellPosition.y - 1;
+    }
+    if (xOffset > headerWidth && yOffset < headerHeight) {
+      cellPosition.placement = 'col-header';
+      cellPosition.x = this.getLeftWidthIndex(width);
+      cellPosition.x = cellPosition.x - 1 < 0 ? 0 : cellPosition.x - 1;
+    }
+    if (xOffset > headerWidth && yOffset > headerHeight) {
+      cellPosition.placement = 'body';
+      cellPosition.x = this.getLeftWidthIndex(width);
+      cellPosition.x = cellPosition.x - 1 < 0 ? 0 : cellPosition.x - 1;
+      cellPosition.y = this.getTopHeightIndex(height);
+      cellPosition.y = cellPosition.y - 1 < 0 ? 0 : cellPosition.y - 1;
+    }
+    return cellPosition;
   }
 };

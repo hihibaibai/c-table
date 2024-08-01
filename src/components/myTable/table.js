@@ -10,6 +10,8 @@ const defaultData = {
   cols: {},
   rowHeight: 25,
   colWidth: 100,
+  headerWidth: 50,
+  headerHeight: 26,
   style: {
     bgColor: '#FFF',
     color: '#333',
@@ -22,7 +24,7 @@ const defaultData = {
     fontSize: 10,
     underline: false,
     strikethrough: false,
-    border: {},
+    border: {}
   },
   styles: [],
   borders: [],

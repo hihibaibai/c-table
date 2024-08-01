@@ -7,5 +7,8 @@ export function eventInit(table) {
 function handleMousedown(table, event) {
   console.log(event.offsetX,event.offsetY);
   console.log(event.target);
+  let cellPosition = table.scrollBar.getCellIndexByXYOffset(event.offsetX,
+      event.offsetY);
+  console.log(cellPosition);
   event.stopPropagation();
 }

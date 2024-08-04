@@ -58,8 +58,8 @@ export default class Table {
     // 设置最外面的容器
     const container = getElement(element);
     ElementOperator.setClass(container, stylePrefix + '--container');
-    ElementOperator.setWidth(container, `${width}px`);
-    ElementOperator.setHeight(container, `${height}px`);
+    ElementOperator.setWidth(container, width);
+    ElementOperator.setHeight(container, height);
     ElementOperator.setPosition(container, 'relative');
     ElementOperator.setOverflow(element, 'hidden');
 
@@ -82,13 +82,12 @@ export default class Table {
     //初始化渲染器
     this.renderer = new Renderer(this.canvasContext, width, height);
 
-    // 在画布上放多个重叠的透明元素，这个元素负责点击事件之类的，在单元框被点击的时候，这些透明元素会变色来显示选中
-    this.overLayer = new OverLayer(container, this.data, this.width, this.height);
-
     // 初始化滚动条
     this.scrollBar = new ScrollBar(container, width, height, this);
     this.scrollBar.setData(this.data);
 
+    // 在画布上放多个重叠的透明元素，这个元素负责点击事件之类的，在单元框被点击的时候，这些透明元素会变色来显示选中
+    this.overLayer = new OverLayer(container, this, this.width, this.height);
     eventInit(this);
   }
 

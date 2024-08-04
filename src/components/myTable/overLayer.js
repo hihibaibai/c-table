@@ -1,5 +1,6 @@
 import {stylePrefix} from '@/components/myTable/config.js';
 import ElementOperator from '@/components/myTable/elementOperator';
+import Cells from '@/components/myTable/cells';
 
 const defaultData = { // 只是为了方便开发使用的
   rows: {},
@@ -52,10 +53,10 @@ export default class OverLayer {
       let xOffset = data.headerWidth;
       let yOffset = data.headerHeight;
       ElementOperator.setPosition(element,'absolute');
-      ElementOperator.setWidth(element, `${width - xOffset}px`);
-      ElementOperator.setHeight(element, `${height - yOffset}px`);
-      ElementOperator.setLeft(element, `${xOffset}px`);
-      ElementOperator.setTop(element, `${yOffset}px`);
+      ElementOperator.setWidth(element, width - xOffset);
+      ElementOperator.setHeight(element, height - yOffset);
+      ElementOperator.setLeft(element, xOffset);
+      ElementOperator.setTop(element, yOffset);
       ElementOperator.setPointerEvents(element, 'none');
     }
     this.bodyOverLayerElement.push(element);

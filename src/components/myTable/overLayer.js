@@ -43,7 +43,6 @@ export default class OverLayer {
     this.viewport = scrollBar.getViewport();
     let {freeze} = defaultData;
 
-    let element = {};
     this.headOverLayerElement.push(this.newHeadOverLayerElement());
     this.headOverLayerElement.push(this.newHeadOverLayerElement());
     this.headOverLayerElement.push(this.newHeadOverLayerElement());
@@ -52,7 +51,7 @@ export default class OverLayer {
     this.bodyOverLayerElement.push(this.newBodyOverLayerElement());
     this.bodyOverLayerElement.push(this.newBodyOverLayerElement());
     this.bodyOverLayerElement.push(this.newBodyOverLayerElement());
-    element = this.newBodyOverLayerElement();
+    let element = this.newBodyOverLayerElement();
     if (freeze != null) {
 
     }
@@ -118,8 +117,8 @@ export default class OverLayer {
     let heightCount = 0;
     let x = this.viewport[0];
     let y = this.viewport[1];
-    const startX = this.viewport[0];
-    const startY = this.viewport[1];
+    // const startX = this.viewport[0];
+    // const startY = this.viewport[1];
     while (overLayerWidth - widthCount >= 0) {
       let cellWidth = 0;
       if (this.data.cols[x]) {
@@ -150,11 +149,12 @@ export default class OverLayer {
       heightCount = heightCount + cellHeight;
       y++;
     }
-    console.log(leftValue, topValue, widthValue, heightValue);
+    // console.log(leftValue, topValue, widthValue, heightValue);
+    // 接着要在这里处理merge的情况
     return {leftValue, topValue, widthValue, heightValue};
   }
 
-  initSelect(){
+  initSelect() {
     let overLayer = this.selectedCell;
     if (overLayer != null) {
       overLayer.remove();

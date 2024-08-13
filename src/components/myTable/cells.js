@@ -21,4 +21,15 @@ export default class Cells {
       cells.push([x, y, value]);
     }
   }
+
+  /**
+   * 如果是merge的话，会把merge的范围返回，不是的情况下返回false
+   * @param data
+   * @param x
+   * @param y
+   */
+  static isCellMerge(data, x, y) {
+    let {merges} = data;
+    const merge = merges.find(merge => {});
+  }
 };

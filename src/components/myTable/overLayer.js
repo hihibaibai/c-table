@@ -33,6 +33,7 @@ export default class OverLayer {
   data;
   viewport;
   selectedCell;// 这里放选中的那个单元格的元素
+  activeCells;// 这里放所有激活状态的元素，也就是淡蓝色的
   headOverLayerElement = [];
   bodyOverLayerElement = []; // 这里的overLayer元素按照象限来划分，第一个是右上角的冻结部分，接着是左上角的冻结，最后是右下角部分是数据的部分
 
@@ -86,12 +87,20 @@ export default class OverLayer {
     return element;
   }
 
-  selectCells(cellPosition) { // 暂时只处理单个选择
+  selectCells(cellPosition) { // 暂时只处理单次选择
     let cell;
     if (cellPosition.placement === 'body') {
       cell = Cells.getCell(this.data, cellPosition.x, cellPosition.y);
       console.log(cell);
-      this.getXYWidthHeightByCell(cellPosition);
+      let {leftValue, topValue, widthValue, heightValue}
+          = this.getXYWidthHeightByCell(cellPosition);
+      this.initSelect();
+      this.drawFocus(leftValue, topValue, widthValue, heightValue);
+      // this.drawActive(leftValue, topValue, widthValue, heightValue);
+    }
+    if (cellPosition.placement === 'col-header') {
+      //这里要生成div到两个地方，一个是header，一个是body
+
     }
 
 
@@ -142,15 +151,22 @@ export default class OverLayer {
       y++;
     }
     console.log(leftValue, topValue, widthValue, heightValue);
+    return {leftValue, topValue, widthValue, heightValue};
+  }
+
+  initSelect(){
     let overLayer = this.selectedCell;
     if (overLayer != null) {
       overLayer.remove();
     }
-    overLayer = document.createElement('div');
-    ElementOperator.setWidth(overLayer, widthValue-2);// 这里的magic number 是为了渲染边框的时候位置正确
-    ElementOperator.setHeight(overLayer, heightValue-2);
-    ElementOperator.setLeft(overLayer, leftValue-1);
-    ElementOperator.setTop(overLayer, topValue-1);
+  }
+  drawFocus(left, top, width, height) {
+    let element = this.bodyOverLayerElement[3];
+    let overLayer = document.createElement('div');
+    ElementOperator.setWidth(overLayer, width-2);// 这里的magic number 是为了渲染边框的时候位置正确
+    ElementOperator.setHeight(overLayer, height-2);
+    ElementOperator.setLeft(overLayer, left-1);
+    ElementOperator.setTop(overLayer, top-1);
     ElementOperator.setPosition(overLayer, 'absolute');
     ElementOperator.setBlockDisplay(overLayer);
     ElementOperator.setPointerEvents(overLayer, 'none');
@@ -158,5 +174,20 @@ export default class OverLayer {
     overLayer.style.setProperty('border', '2px solid #4b89ff');
     element.append(overLayer);
     this.selectedCell = overLayer;
+  }
+
+  drawActive(left, top, width, height){
+    let element = this.bodyOverLayerElement[3];
+    let overLayer = document.createElement('div');
+    ElementOperator.setWidth(overLayer, width);// 这里的magic number 是为了渲染边框的时候位置正确
+    ElementOperator.setHeight(overLayer, height);
+    ElementOperator.setLeft(overLayer, left);
+    ElementOperator.setTop(overLayer, top);
+    ElementOperator.setPosition(overLayer, 'absolute');
+    ElementOperator.setBlockDisplay(overLayer);
+    ElementOperator.setPointerEvents(overLayer, 'none');
+    overLayer.style.setProperty('background', 'rgba(67,148,241,0.2)');
+    element.append(overLayer);
+    this.activeCells = overLayer;
   }
 };

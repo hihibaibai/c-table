@@ -30,6 +30,11 @@ export default class Cells {
    */
   static isCellMerge(data, x, y) {
     let {merges} = data;
-    const merge = merges.find(merge => {});
+    // console.log(data);
+    // console.log(merges);
+    // console.log(x, y);
+    return merges.find(merge => {
+      return x >= merge.sx && x <= merge.ex && y >= merge.sy && y <= merge.ey;
+    });
   }
 };

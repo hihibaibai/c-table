@@ -4,6 +4,7 @@ import ElementOperator from '@/components/myTable/elementOperator';
 import Renderer from '@/components/myTable/renderer';
 import ScrollBar from '@/components/myTable/scrollBar';
 import {eventInit} from '@/components/myTable/event';
+import Resizer from "@/components/myTable/resizer";
 
 const defaultData = {
   rows: {},
@@ -82,6 +83,9 @@ export default class Table {
     //初始化渲染器
     this.renderer = new Renderer(this.canvasContext, width, height);
 
+    // 初始化行宽列高调整期
+    this.resizer = new Resizer(container, width, height, this);
+
     // 初始化滚动条
     this.scrollBar = new ScrollBar(container, width, height, this);
     this.scrollBar.setData(this.data);
@@ -94,6 +98,7 @@ export default class Table {
   setData(data){
     this.data = data;
     this.scrollBar.setData(this.data);
+    this.overLayer.setData(this.data);
     return this;
   }
 

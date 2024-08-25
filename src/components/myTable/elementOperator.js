@@ -19,12 +19,20 @@ export default class ElementOperator{
     element.style.setProperty('left', `${left}px`);
   }
 
+  static getLeft(element) {
+    return parseInt(element.style.left);
+  }
+
   static setRight(element, right) {
     element.style.setProperty('right', `${right}px`);
   }
 
   static setTop(element, top) {
     element.style.setProperty('top', `${top}px`);
+  }
+
+  static getTop(element) {
+    return parseInt(element.style.top);
   }
 
   static setBottom(element, bottom) {

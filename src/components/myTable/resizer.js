@@ -92,7 +92,6 @@ export default class Resizer {
       while (this.table.width - widthCount >= 0) {
         let cellWidth = 0;
         if (this.table.data.cols[x]) {
-          debugger;
           cellWidth = this.table.data.cols[x];
         } else {
           cellWidth = this.table.data.colWidth;
@@ -114,7 +113,6 @@ export default class Resizer {
       ElementOperator.setBlockDisplay(this.colResizer);
     }
     if (cellPosition.placement === "row-header") {
-      debugger;
       while (this.table.height - heightCount >= 0) {
         let cellHeight = 0;
         if (this.table.data.rows[y]) {

@@ -1,5 +1,3 @@
-import Cells from '@/components/myTable/cells';
-
 export default class ScrollBar {
   vScrollBar;
   hScrollBar;
@@ -7,11 +5,16 @@ export default class ScrollBar {
   vWeightHeight;
   hWeight;
   hWeightWidth;
+  table;
+  tableWidth;
+  tableHeight;
   data;
   viewport = [0,0,0,0];// 这个是控制的是可以滚动部分的区域，冻结部分不在这里的
 
   constructor(container, width, height, table) {
     let {data} = table;
+    this.tableWidth = width;
+    this.tableHeight = height;
     this.vWeightHeight = height + data.rowHeight * 3;
     this.hWeightWidth = width + data.colWidth * 3;
     this.createVerticalScrollBar(container,height);
@@ -60,31 +63,10 @@ export default class ScrollBar {
       this.viewport[0] = widthStartIndex;
       this.viewport[2] = widthStartIndex + wRange;
       table.render();
+      table.selector.renderSelect();
     }
     this.vScrollBar.addEventListener('scroll', handleScrollEvent);
     this.hScrollBar.addEventListener('scroll', handleScrollEvent);
-    const foobar = () => {
-      let height = 63;
-      let {rows,rowHeight} = this.data;
-      let i = 0;
-      let heightOffset = 0;
-      while (true) {
-        if (height < heightOffset) {
-          break;
-        }
-        if (rows[i]) {
-          heightOffset = heightOffset + rows[i];
-          i++;
-        }
-        else {
-          heightOffset = heightOffset + rowHeight;
-          i++;
-        }
-      }
-      return i;
-    }
-    // this.vScrollBar.addEventListener('scroll', foobar);
-
   }
 
   createVerticalScrollBar(container, height) {
@@ -264,5 +246,103 @@ export default class ScrollBar {
       cellPosition.y = cellPosition.y - 1 < 0 ? 0 : cellPosition.y - 1;
     }
     return cellPosition;
+  }
+
+  getXYOffsetWidthHeightByCell(xIndex,yIndex) {
+    let leftValue = 0;
+    let topValue = 0;
+    let widthValue = 0;
+    let heightValue = 0;
+    let widthCount = 0;
+    let heightCount = 0;
+    let x = this.viewport[0];
+    let y = this.viewport[1];
+    while (this.tableWidth - widthCount >= 0) {
+      let cellWidth = 0;
+      if (this.data.cols[x]) {
+        cellWidth = this.data.cols[x];
+      } else {
+        cellWidth = this.data.colWidth;
+      }
+      if (x === xIndex) {
+        leftValue = widthCount;
+        widthValue = cellWidth;
+        break;
+      }
+      widthCount = widthCount + cellWidth;
+      x++;
+    }
+    while (this.tableHeight - heightCount >= 0) {
+      let cellHeight = 0;
+      if (this.data.rows[y]) {
+        cellHeight = this.data.rows[y];
+      } else {
+        cellHeight = this.data.rowHeight;
+      }
+      if (y === yIndex) {
+        topValue = heightCount;
+        heightValue = cellHeight;
+        break;
+      }
+      heightCount = heightCount + cellHeight;
+      y++;
+    }
+    // console.log(leftValue, topValue, widthValue, heightValue);
+    if (widthValue === 0 || heightValue === 0) {
+      return null;
+    }
+    return {leftValue, topValue, widthValue, heightValue};
+  }
+
+  getXYOffsetWidthHeightByIndexRange(sx, sy, ex, ey) {
+    // console.log(sx,sy,ex,ey)
+    let leftValue = 0;
+    let topValue = 0;
+    let widthValue = 0;
+    let heightValue = 0;
+    let widthCount = 0;
+    let heightCount = 0;
+    let x = this.viewport[0];
+    let y = this.viewport[1];
+    while (this.tableWidth - widthCount >= 0) {
+      let cellWidth = 0;
+      if (this.data.cols[x]) {
+        cellWidth = this.data.cols[x];
+      } else {
+        cellWidth = this.data.colWidth;
+      }
+      if (x < sx) {
+        leftValue = leftValue + cellWidth;
+      }
+      if (x >= sx) {
+        widthValue = widthValue + cellWidth;
+      }
+      if (x >= ex) {
+        break;
+      }
+      widthCount = widthCount + cellWidth;
+      x++;
+    }
+    while (this.tableHeight - heightCount >= 0) {
+      let cellHeight = 0;
+      if (this.data.rows[y]) {
+        cellHeight = this.data.rows[y];
+      } else {
+        cellHeight = this.data.rowHeight;
+      }
+      if (y < sy) {
+        topValue = topValue + cellHeight;
+      }
+      if (y >= sy) {
+        heightValue = heightValue + cellHeight;
+      }
+      if (y >= ey) {
+        break;
+      }
+      heightCount = heightCount + cellHeight;
+      y++;
+    }
+    // console.log(leftValue, topValue, widthValue, heightValue);
+    return {leftValue, topValue, widthValue, heightValue};
   }
 };

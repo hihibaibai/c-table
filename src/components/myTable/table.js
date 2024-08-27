@@ -5,6 +5,8 @@ import Renderer from '@/components/myTable/renderer';
 import ScrollBar from '@/components/myTable/scrollBar';
 import {eventInit} from '@/components/myTable/event';
 import Resizer from "@/components/myTable/resizer";
+import Editor from "@/components/myTable/editor";
+import Selector from "@/components/myTable/selector";
 
 const defaultData = {
   rows: {},
@@ -34,8 +36,8 @@ const defaultData = {
 };
 
 export default class Table {
-  width = '';
-  height = '';
+  width = 0;
+  height = 0;
   data = {};
   canvas = {};
   canvasContext = {};
@@ -92,6 +94,10 @@ export default class Table {
 
     // 在画布上放多个重叠的透明元素，这个元素负责点击事件之类的，在单元框被点击的时候，这些透明元素会变色来显示选中
     this.overLayer = new OverLayer(container, this, this.width, this.height);
+
+    this.selector = new Selector(this);
+
+    this.editor = new Editor();
     eventInit(this);
   }
 

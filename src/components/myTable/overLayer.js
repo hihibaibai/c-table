@@ -1,6 +1,5 @@
 import {stylePrefix} from '@/components/myTable/config.js';
 import ElementOperator from '@/components/myTable/elementOperator';
-import Cells from '@/components/myTable/cells';
 
 const defaultData = { // 只是为了方便开发使用的
   rows: {},
@@ -84,7 +83,9 @@ export default class OverLayer {
     element = this.newBodyOverLayerElement();
     if (freeze != null) {
 
-    } else {
+    }
+    else {
+
       let xOffset = data.headerWidth;
       let yOffset = data.headerHeight;
       ElementOperator.setPosition(element, 'absolute');
@@ -118,159 +119,14 @@ export default class OverLayer {
     ElementOperator.setClass(element, `${stylePrefix}--OverLayer--body`);
     return element;
   }
-
-  selectCells(cellPosition) { // 暂时只处理单次选择
-    this.initSelect();
-    if (cellPosition.placement === 'body') {
-      let isMerged = Cells.isCellMerge(this.data, cellPosition.x, cellPosition.y);
-      let drawInfo = {
-        leftValue: 0,
-        topValue: 0,
-        widthValue: 0,
-        heightValue: 0
-      };
-      if (isMerged) {
-        drawInfo = this.getXYOffsetWidthHeightByIndexRange(isMerged.sx, isMerged.sy, isMerged.ex, isMerged.ey);
-      } else {
-        drawInfo = this.getXYOffsetWidthHeightByCell(cellPosition);
-      }
-      // console.log(drawInfo);
-      this.drawFocus(drawInfo.leftValue, drawInfo.topValue, drawInfo.widthValue, drawInfo.heightValue);
-      // this.drawActive(leftValue, topValue, widthValue, heightValue);
+  removeSelectedCell(){
+    if (this.selectedCell) {
+      this.selectedCell.remove();
     }
-    if (cellPosition.placement === 'col-header') {
-      //这里要生成div到两个地方，一个是header，一个是body
-      // console.log(cellPosition);
-      let {leftValue, widthValue} = this.getXYOffsetWidthHeightByCell(cellPosition);
-      this.drawHeaderActive('col-header', leftValue, 0, widthValue, this.data.headerHeight);
-      this.drawHeaderActive('row-header', 0, 0, this.data.headerWidth, this.tableHeight - this.data.headerHeight);
-      this.drawCellsActive(leftValue, 0, widthValue, this.tableHeight - this.data.headerHeight);
-    }
-    if (cellPosition.placement === 'row-header') {
-      let {topValue, heightValue} = this.getXYOffsetWidthHeightByCell(cellPosition);
-      this.drawHeaderActive('col-header', 0, 0, this.tableWidth - this.data.headerWidth, this.data.headerHeight);
-      this.drawHeaderActive('row-header', 0, topValue, this.data.headerWidth, heightValue);
-      this.drawCellsActive(0, topValue, this.tableWidth - this.data.headerWidth, this.data.headerHeight);
-    }
-  }
-
-  getXYOffsetWidthHeightByCell(cellPosition) {
-    // let element = this.bodyOverLayerElement[3];
-    // let overLayerWidth = parseInt(window.getComputedStyle(element).getPropertyValue('width'));
-    // let overLayerHeight = parseInt(window.getComputedStyle(element).getPropertyValue('height'));
-    let leftValue = 0;
-    let topValue = 0;
-    let widthValue = 0;
-    let heightValue = 0;
-    let widthCount = 0;
-    let heightCount = 0;
-    let x = this.viewport[0];
-    let y = this.viewport[1];
-    while (this.tableWidth - widthCount >= 0) {
-      let cellWidth = 0;
-      if (this.data.cols[x]) {
-        cellWidth = this.data.cols[x];
-      } else {
-        cellWidth = this.data.colWidth;
-      }
-      if (x === cellPosition.x) {
-        leftValue = widthCount;
-        widthValue = cellWidth;
-        break;
-      }
-      widthCount = widthCount + cellWidth;
-      x++;
-    }
-    while (this.tableHeight - heightCount >= 0) {
-      let cellHeight = 0;
-      if (this.data.rows[y]) {
-        cellHeight = this.data.rows[y];
-      } else {
-        cellHeight = this.data.rowHeight;
-      }
-      if (y === cellPosition.y) {
-        topValue = heightCount;
-        heightValue = cellHeight;
-        break;
-      }
-      heightCount = heightCount + cellHeight;
-      y++;
-    }
-    // console.log(leftValue, topValue, widthValue, heightValue);
-    return {leftValue, topValue, widthValue, heightValue};
-  }
-
-  getXYOffsetWidthHeightByIndexRange(sx, sy, ex, ey) {
-    // console.log(sx,sy,ex,ey)
-    let leftValue = 0;
-    let topValue = 0;
-    let widthValue = 0;
-    let heightValue = 0;
-    let widthCount = 0;
-    let heightCount = 0;
-    let x = this.viewport[0];
-    let y = this.viewport[1];
-    while (this.tableWidth - widthCount >= 0) {
-      let cellWidth = 0;
-      if (this.data.cols[x]) {
-        cellWidth = this.data.cols[x];
-      } else {
-        cellWidth = this.data.colWidth;
-      }
-      if (x < sx) {
-        leftValue = leftValue + cellWidth;
-      }
-      if (x >= sx) {
-        widthValue = widthValue + cellWidth;
-      }
-      if (x >= ex) {
-        break;
-      }
-      widthCount = widthCount + cellWidth;
-      x++;
-    }
-    while (this.tableHeight - heightCount >= 0) {
-      let cellHeight = 0;
-      if (this.data.rows[y]) {
-        cellHeight = this.data.rows[y];
-      } else {
-        cellHeight = this.data.rowHeight;
-      }
-      if (y < sy) {
-        topValue = topValue + cellHeight;
-      }
-      if (y >= sy) {
-        heightValue = heightValue + cellHeight;
-      }
-      if (y >= ey) {
-        break;
-      }
-      heightCount = heightCount + cellHeight;
-      y++;
-    }
-    // console.log(leftValue, topValue, widthValue, heightValue);
-    return {leftValue, topValue, widthValue, heightValue};
-  }
-
-  initSelect() {
-    let overLayer = this.selectedCell;
-    if (overLayer != null) {
-      overLayer.remove();
-    }
-    if (this.activeCells) {
-      this.activeCells.forEach(i => {
-        i.remove();
-      });
-    }
-    if (this.activeHeaders) {
-      this.activeHeaders.forEach(i => {
-        i.remove();
-      });
-    }
-
   }
 
   drawFocus(left, top, width, height) {
+    this.removeSelectedCell();
     let element = this.bodyOverLayerElement[3];
     let overLayer = document.createElement('div');
     ElementOperator.setWidth(overLayer, width - 2);// 这里的magic number 是为了渲染边框的时候位置正确
@@ -287,6 +143,11 @@ export default class OverLayer {
   }
 
   drawCellsActive(left, top, width, height) {
+    if (this.activeCells) {
+      this.activeCells.forEach(i => {
+        i.remove();
+      });
+    }
     this.activeCells = [];// 这里之后会处理选中的那个框的空白的 这里先制作点击表头后表表身高亮的情况
     let element = this.bodyOverLayerElement[3];
     let overLayer = document.createElement('div');
@@ -303,6 +164,11 @@ export default class OverLayer {
   }
 
   drawHeaderActive(position, left, top, width, height) {
+    if (this.activeHeaders) {
+      this.activeHeaders.forEach(i => {
+        i.remove();
+      });
+    }
     let colElement = this.headOverLayerElement[0];
     let rowElement = this.headOverLayerElement[2];
     if (position === "col-header") {
@@ -329,5 +195,9 @@ export default class OverLayer {
       rowElement.append(overLayer);
       this.activeHeaders.push(overLayer);
     }
+  }
+
+  getSelectedCellParentElement() {
+    return this.selectedCell.parentNode;
   }
 };

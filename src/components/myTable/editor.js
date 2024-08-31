@@ -1,5 +1,4 @@
 import ElementOperator from "@/components/myTable/elementOperator";
-import Cells from "@/components/myTable/cells";
 
 export default class Editor {
   table;
@@ -34,19 +33,6 @@ export default class Editor {
     editor.append(editorInput);
     this.editorElement = editor;
     this.inputElement = editorInput;
-    let {x, y} = this.table.selector.currentCell;
-    // editorInput.addEventListener('blur', (event) => {
-    //   console.log(2)
-    //   let cell = Cells.getCell(this.table.data, x, y);
-    //   cell.value = editorInput.value;
-    //   Cells.setCell(this.table.data, x, y, cell);
-    //   let parentElement = this.overLayer.getSelectedCellParentElement();
-    //   // ElementOperator.hideElement(editor);
-    //   if (parentElement) {
-    //     parentElement.removeChild(editor);
-    //   }
-    //   this.table.selector.initSelect();
-    // });
   }
 
   hideEditor(){

@@ -11,8 +11,16 @@ export default class ElementOperator{
     element.style.setProperty('width',`${width}px`);
   }
 
+  static getWidth(element) {
+    return parseInt(element.style.width);
+  }
+
   static setHeight(element, height) {
     element.style.setProperty('height', `${height}px`);
+  }
+
+  static getHeight(element) {
+    return parseInt(element.style.height);
   }
 
   static setLeft(element, left) {

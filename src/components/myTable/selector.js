@@ -21,7 +21,13 @@ export default class Selector {
     this.initSelect();
     let cellPosition = this.table.scrollBar.getCellIndexByXYOffset(offsetX, offsetY);
     if (cellPosition.placement === 'body') {
-      this.currentCell = {x:cellPosition.x, y: cellPosition.y};
+      let mergeCell = Cells.isCellMerge(this.table.data, cellPosition.x, cellPosition.y);
+      if (!mergeCell) {
+        this.currentCell = {x: cellPosition.x, y: cellPosition.y};
+      }
+      else {
+        this.currentCell = {x: mergeCell.sx, y: mergeCell.sy};
+      }
     }
     if (cellPosition.placement === 'col-header') {
       this.selectedRange = {sx: cellPosition.x, ex: cellPosition.x};

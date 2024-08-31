@@ -37,14 +37,16 @@ export default class Selector {
   }
 
   initSelect(){
-
+    // console.log(this.currentCell);
     this.currentCell = {};
     this.selectedRange = {};
+    this.table.editor.hideEditor();
+    this.table.overLayer.clearActive();
     this.renderSelect();
   }
 
   renderSelect(){
-    if (this.selectedRange !== {}) {
+    if (this.currentCell.x != null && this.currentCell.y != null) {
       let isMerged = Cells.isCellMerge(this.table.data, this.currentCell.x, this.currentCell.y);
       let drawInfo = {
         leftValue: 0,
@@ -59,19 +61,17 @@ export default class Selector {
       }
       if (drawInfo) {
         this.table.overLayer.drawFocus(drawInfo.leftValue, drawInfo.topValue, drawInfo.widthValue, drawInfo.heightValue);
-      }
-      else {
+      } else {
         this.table.overLayer.removeSelectedCell();
       }
-    }
-    else {
-      if (this.selectedRange.sx) {
+    } else {
+      if (this.selectedRange.sx != null) {
         let {leftValue, widthValue} = this.table.scrollBar.getXYOffsetWidthHeightByCell(this.selectedRange.sx, 0);
         this.table.overLayer.drawHeaderActive('col-header', leftValue, 0, widthValue, this.table.data.headerHeight);
         this.table.overLayer.drawHeaderActive('row-header', 0, 0, this.table.data.headerWidth, this.table.height - this.table.data.headerHeight);
         this.table.overLayer.drawCellsActive(leftValue, 0, widthValue, this.table.height - this.table.data.headerHeight);
       }
-      if (this.selectedRange.sy) {
+      if (this.selectedRange.sy != null) {
         let {topValue, heightValue} = this.table.scrollBar.getXYOffsetWidthHeightByCell(0, this.selectedRange.sy);
         this.table.overLayer.drawHeaderActive('col-header', 0, 0, this.table.width - this.table.data.headerWidth, this.table.data.headerHeight);
         this.table.overLayer.drawHeaderActive('row-header', 0, topValue, this.table.data.headerWidth, heightValue);

@@ -119,10 +119,25 @@ export default class OverLayer {
     ElementOperator.setClass(element, `${stylePrefix}--OverLayer--body`);
     return element;
   }
+
   removeSelectedCell(){
     if (this.selectedCell) {
       this.selectedCell.remove();
     }
+  }
+
+  removeActiveCells() {
+    for (let activeCell of this.activeCells) {
+      activeCell.remove();
+    }
+    for (let activeHeader of this.activeHeaders) {
+      activeHeader.remove();
+    }
+  }
+
+  clearActive() {
+    this.removeSelectedCell();
+    this.removeActiveCells();
   }
 
   drawFocus(left, top, width, height) {
@@ -198,6 +213,9 @@ export default class OverLayer {
   }
 
   getSelectedCellParentElement() {
-    return this.selectedCell.parentNode;
+    if (this.selectedCell) {
+      return this.selectedCell.parentNode;
+    }
+    return null;
   }
 };

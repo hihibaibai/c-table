@@ -97,7 +97,7 @@ export default class Table {
 
     this.selector = new Selector(this);
 
-    this.editor = new Editor();
+    this.editor = new Editor(this);
     eventInit(this);
   }
 

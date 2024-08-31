@@ -6,10 +6,7 @@ export function eventInit(table) {
 }
 
 function handleMousedown(table, event) {// 这个函数处理单元格的选择
-  console.log(event.offsetX,event.offsetY);
-  console.log(event.target);
   table.selector.selectCell(event.offsetX, event.offsetY);
-
   event.stopPropagation();
 }
 
@@ -29,6 +26,8 @@ function handleMouseMove(table, event){
 }
 
 function handleDbClick(table, event) {
-  console.log(event)
+  // console.log(event);
+  table.selector.selectCell(event.offsetX, event.offsetY);
+  table.editor.renderEditor();
   event.preventDefault();
 }

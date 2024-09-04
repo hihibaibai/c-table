@@ -1,4 +1,4 @@
-# wolf-table
+# c-table
 
 ## Project setup
 ```

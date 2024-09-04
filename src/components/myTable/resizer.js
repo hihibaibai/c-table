@@ -105,7 +105,6 @@ export default class Resizer {
         x++;
       }
       let left = leftValue + widthValue - 5 + this.table.data.headerWidth;
-      console.log(leftValue, widthValue);
       ElementOperator.setLeft(this.colResizer, left);
       ElementOperator.setWidth(this.colResizer, 5);
       ElementOperator.setHeight(this.colResizer, this.table.data.headerHeight);
@@ -150,7 +149,7 @@ export default class Resizer {
 
 function mousedownHandler(event, resizerElement, lineElement, type, resizer) {
   ElementOperator.showElement(lineElement);
-  let {cellPosition, data} = resizer;
+  let {cellPosition} = resizer;
   console.log(cellPosition);
   const mouseMove = (event) => {
     let data = resizer.table.data;

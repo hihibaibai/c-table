@@ -6,7 +6,7 @@ export function eventInit(table) {
 }
 
 function handleMousedown(table, event) {// 这个函数处理单元格的选择
-  table.selector.selectCell(event.offsetX, event.offsetY);
+  table.selector.selectCell(event.offsetX, event.offsetY, false);
   event.stopPropagation();
 }
 
@@ -22,6 +22,9 @@ function handleMouseMove(table, event){
       table.resizer.hideRowResizer();
       table.resizer.hideColResizer();
     }
+  }
+  if (buttons === 1) {
+    table.selector.selectCell(event.offsetX, event.offsetY, true);
   }
 }
 

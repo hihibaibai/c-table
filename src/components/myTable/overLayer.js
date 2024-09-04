@@ -179,11 +179,6 @@ export default class OverLayer {
   }
 
   drawHeaderActive(position, left, top, width, height) {
-    if (this.activeHeaders) {
-      this.activeHeaders.forEach(i => {
-        i.remove();
-      });
-    }
     let colElement = this.headOverLayerElement[0];
     let rowElement = this.headOverLayerElement[2];
     if (position === "col-header") {
